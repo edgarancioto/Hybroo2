@@ -1,5 +1,5 @@
 import os
-from flask import Flask
+from flask import Flask, request
 from flask_cors import CORS
 import json
 
@@ -17,7 +17,13 @@ def functions_names():
 
 @app.route('/functions-details')
 def functions_details():
-    return json.load(open(os.path.dirname(__file__) + "/BackEnd/FunctionProblem/Functions/functions-details.json"))
+    function_id = int(request.args.get('id'))
+    file_data = open(os.path.dirname(__file__) + "/BackEnd/FunctionProblem/Functions/functions-details.json", 'r')
+    data = json.loads(file_data.read())
+    for i in data:
+        if function_id == i['id']:
+            return i
+    return "<h1>NOT FOUND</h1>"
      
 
 def main():
