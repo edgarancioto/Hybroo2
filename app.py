@@ -13,7 +13,7 @@ def index():
 
 @app.route('/functions-names')
 def functions_names():
-    return json.load(open(os.path.dirname(__file__) + "/BackEnd/FunctionProblem/Functions/functions-names.json"))
+    return str(json.load(open(os.path.dirname(__file__) + "/BackEnd/FunctionProblem/Functions/functions-names.json")))
 
 @app.route('/functions-details')
 def functions_details():
