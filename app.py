@@ -1,6 +1,7 @@
 import os
 from flask import Flask
 from flask_cors import CORS
+import json
 
 app = Flask(__name__)
 
@@ -9,6 +10,12 @@ cors = CORS(app, resource={r"/*":{"origins": "*"}})
 @app.route("/", methods=['GET'])
 def index():
     return "<h1>Hello World!</h1>"
+
+@app.route('/functions')
+def functions():
+    function_names = json.load(open(os.path.dirname(__file__) + "/BackEnd/FunctionProblem/Functions/functions-names.json"))
+    #function_names = json.load(open(os.path.dirname(__file__) + "/" + os.pardir + "/BackEnd/FunctionProblem/Functions/functions.json"))
+    return function_names
 
 
 def main():
