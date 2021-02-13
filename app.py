@@ -11,12 +11,14 @@ cors = CORS(app, resource={r"/*":{"origins": "*"}})
 def index():
     return "<h1>HYBROO!</h1>"
 
-@app.route('/functions')
-def functions():
-    function_names = json.load(open(os.path.dirname(__file__) + "/BackEnd/FunctionProblem/Functions/functions-names.json"))
-    #function_names = json.load(open(os.path.dirname(__file__) + "/" + os.pardir + "/BackEnd/FunctionProblem/Functions/functions.json"))
-    return function_names
+@app.route('/functions-names')
+def functions_names():
+    return json.load(open(os.path.dirname(__file__) + "/BackEnd/FunctionProblem/Functions/functions-names.json"))
 
+@app.route('/functions-details')
+def functions_details():
+    return json.load(open(os.path.dirname(__file__) + "/BackEnd/FunctionProblem/Functions/functions-details.json"))
+     
 
 def main():
     port = int(os.environ.get("PORT", 5000))
