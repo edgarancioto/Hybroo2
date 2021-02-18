@@ -25,7 +25,7 @@ def functions_details():
     for i in data['data']:
         if function_id == i['id']:
             func = sympify(i['formulation'], evaluate=False)
-            i['img'] = 'http://latex.codecogs.com/svg.latex?'+latex(func)
+            i['img'] = 'http://latex.codecogs.com/png.latex?'+latex(func)
             print(i)
             return i
     return "<h1>NOT FOUND</h1>"
