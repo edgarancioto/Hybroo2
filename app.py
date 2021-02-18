@@ -13,14 +13,19 @@ def index():
 
 @app.route('/functions-names')
 def functions_names():
-    return str(json.load(open(os.path.dirname(__file__) + "/BackEnd/FunctionProblem/Functions/functions-names.json")))
+    file_data = open(os.path.dirname(__file__) + "/BackEnd/FunctionProblem/Functions/functions-names.json", 'r')
+    return json.loads(file_data.read())
 
 @app.route('/functions-details')
 def functions_details():
     function_id = int(request.args.get('id'))
     file_data = open(os.path.dirname(__file__) + "/BackEnd/FunctionProblem/Functions/functions-details.json", 'r')
     data = json.loads(file_data.read())
-    for i in data:
+    print()
+    print(data)
+    print(type(data))
+    print(data['data'])
+    for i in data['data']:
         if function_id == i['id']:
             return i
     return "<h1>NOT FOUND</h1>"
