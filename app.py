@@ -1,5 +1,5 @@
 import os
-from flask import Flask, request
+from flask import Flask, request, send_file
 from flask_cors import CORS
 import json
 from sympy import latex, sympify
@@ -24,6 +24,9 @@ def functions_details():
     data = json.loads(file_data.read())
     for i in data['data']:
         if function_id == i['id']:
+            func = sympify(i['formulation'], evaluate=False)
+            i['img'] = 'http://latex.codecogs.com/svg.latex?'+latex(func)
+            print(i)
             return i
     return "<h1>NOT FOUND</h1>"
 
@@ -36,7 +39,7 @@ def functions_details_img():
     for i in data['data']:
         if function_id == i['id']:
             func = sympify(i['formulation'], evaluate=False)
-            return 'http://latex.codecogs.com/svg.latex?'+latex(func)
+            return send_file('http://latex.codecogs.com/svg.latex?'+latex(func), mimetype='image/gif')
     return "<h1>NOT FOUND</h1>"
         
 
