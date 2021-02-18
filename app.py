@@ -31,19 +31,6 @@ def functions_details():
     return "<h1>NOT FOUND</h1>"
 
 
-@app.route('/functions-details-img')
-def functions_details_img():
-    function_id = int(request.args.get('id'))
-    file_data = open(os.path.dirname(__file__) + "/BackEnd/FunctionProblem/Functions/functions-details.json", 'r')
-    data = json.loads(file_data.read())
-    for i in data['data']:
-        if function_id == i['id']:
-            func = sympify(i['formulation'], evaluate=False)
-            return send_file('http://latex.codecogs.com/svg.latex?'+latex(func), mimetype='image/gif')
-    return "<h1>NOT FOUND</h1>"
-        
-
-
 def main():
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port, debug=True)
