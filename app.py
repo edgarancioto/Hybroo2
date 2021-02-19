@@ -53,8 +53,8 @@ def find_function_by_id(id):
 ################## INSTANCES #####################
 @app.route('/instances-names')
 def instances_names():
-    files_cvrp = [os.path.basename(x) for x in os.listdir(os.path.dirname(__file__) + "/CODE/FILES/INSTANCES/CVRP")]
-    files_tsp = [os.path.basename(x) for x in os.listdir(os.path.dirname(__file__) + "/CODE/FILES/INSTANCES/TSP")]
+    files_cvrp = [os.path.basename(x) for x in os.listdir(os.path.dirname(__file__) + "/CODE/INSTANCES/CVRP")]
+    files_tsp = [os.path.basename(x) for x in os.listdir(os.path.dirname(__file__) + "/CODE/INSTANCES/TSP")]
     names = {
         'cvrp':{},
         'tsp':{}
