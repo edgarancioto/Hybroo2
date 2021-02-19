@@ -7,18 +7,15 @@ import statistics
 import os
 import ast
 from werkzeug.serving import run_simple
-
 import json
-
 from flask_cors import CORS
 
-"""
+
 function_selected_object = None
 function_mode = None
 function_info = []
 to_reload = False
-"""
-"""
+
 def get_app():
     app = Flask(__name__)
     app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
