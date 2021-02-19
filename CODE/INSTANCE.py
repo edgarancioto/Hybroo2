@@ -29,7 +29,7 @@ class Instance(object):
     def load_instance(self, name):
         self.__init__()
         self.name = name
-        with open(os.path.dirname(__file__) + "//Instances//" + self.name) as f:
+        with open(os.path.dirname(__file__) + "/INSTANCES/CVRP/" + self.name) as f:
             while True:
                 line = f.readline()
                 (var, _, val) = line.partition(":")
@@ -122,7 +122,20 @@ class Instance(object):
         total += self.node_distances[nodes[-1]][nodes[0]]
         return total
 
-
+    def json(self):
+        return {
+            'name': self.name,
+            'comment': self.comment,
+            'dimension': self.dimension,
+            'capacity': self.capacity,
+            'type': self.type,
+            'nct': self.nct,
+            'ewt': self.ewt,
+            'ewf': self.ewf,
+            'edf': self.edf,
+            'ddt': self.ddt,
+            'node_coord_section': self.node_coord
+        }
 
 
 

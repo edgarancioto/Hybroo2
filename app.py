@@ -3,12 +3,10 @@ from flask import Flask, request, send_file
 from flask_cors import CORS
 import json
 from sympy import latex, sympify
-from BackEnd.FunctionProblem import FUNCTION
+from CODE import FUNCTION, INSTANCE
 
 app = Flask(__name__)
 cors = CORS(app, resource={r"/*":{"origins": "*"}})
-
-function_selected_object = None
 
 
 @app.route("/", methods=['GET'])
@@ -17,7 +15,7 @@ def index():
 
 @app.route('/functions-names')
 def functions_names():
-    file_data = open(os.path.dirname(__file__) + "/BackEnd/FunctionProblem/Functions/functions-names.json", 'r')
+    file_data = open(os.path.dirname(__file__) + "/CODE/JSON/functions-names.json", 'r')
     return json.loads(file_data.read())
 
 @app.route('/functions-details')
@@ -31,8 +29,8 @@ def functions_details():
 
 @app.route('/functions-details-img')
 def functions_details_img():
-    function_id = int(request.args.get('id'))
     try:
+        function_id = int(request.args.get('id'))
         i, _ = find_function_by_id(function_id)
         return {
             'id': i['id'],
@@ -42,22 +40,21 @@ def functions_details_img():
         return "<h1>NOT FOUND</h1>"
 
 def find_function_by_id(id):
-    global function_selected_object
-    file_data = open(os.path.dirname(__file__) + "/BackEnd/FunctionProblem/Functions/functions-details.json", 'r')
+    file_data = open(os.path.dirname(__file__) + "/CODE/JSON/functions-details.json", 'r')
     data = json.loads(file_data.read())
     for i in data['data']:
         if id == i['id']:
-            if function_selected_object is None or function_selected_object.id != i['id'] :
-                function_selected_object = FUNCTION.Function()
-                function_selected_object.build_function(i)
+            function_selected_object = FUNCTION.Function()
+            function_selected_object.build_function(i)
             return i, function_selected_object
     raise Exception("Index out of bounds")
 
 
+################## INSTANCES #####################
 @app.route('/instances-names')
 def instances_names():
-    files_cvrp = [os.path.basename(x) for x in os.listdir(os.path.dirname(__file__) + "/BackEnd/InstanceProblem/Instances/CVRP")]
-    files_tsp = [os.path.basename(x) for x in os.listdir(os.path.dirname(__file__) + "/BackEnd/InstanceProblem/Instances/TSP")]
+    files_cvrp = [os.path.basename(x) for x in os.listdir(os.path.dirname(__file__) + "/CODE/FILES/INSTANCES/CVRP")]
+    files_tsp = [os.path.basename(x) for x in os.listdir(os.path.dirname(__file__) + "/CODE/FILES/INSTANCES/TSP")]
     names = {
         'cvrp':{},
         'tsp':{}
@@ -71,6 +68,34 @@ def instances_names():
         names['tsp'][j] = i
         j += 1
     return names
+
+@app.route('/instances-details')
+def instances_details():
+    try:
+        instance_name = request.args.get('name')
+        instance = INSTANCE.Instance()
+        instance.load_instance(instance_name)
+        return instance.json()
+    except:
+        return "<h1>NOT FOUND</h1>"
+   
+
+@app.route('/instances-details-coord')
+def instances_details_coord():
+    try:
+        instance_name = request.args.get('name').replace('.vrp','-coords.png').replace('.tsp','-coords.png')
+        return send_file(os.path.dirname(__file__) + "/CODE/IMAGES/COORD/"+instance_name)
+    except:
+        return "<h1>NOT FOUND</h1>"
+
+
+@app.route('/instances-details-best')
+def instances_details_best():
+    try:
+        instance_name = request.args.get('name').replace('.vrp','-best.png').replace('.tsp','-best.png')
+        return send_file(os.path.dirname(__file__) + "/CODE/IMAGES/BEST/"+instance_name)
+    except:
+        return "<h1>NOT FOUND</h1>"
 
 
 def main():
