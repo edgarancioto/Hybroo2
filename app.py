@@ -54,6 +54,24 @@ def find_function_by_id(id):
     raise Exception("Index out of bounds")
 
 
+@app.route('/instances-names')
+def instances_names():
+    files_cvrp = [os.path.basename(x) for x in os.listdir(os.path.dirname(__file__) + "/BackEnd/InstanceProblem/Instances/CVRP")]
+    files_tsp = [os.path.basename(x) for x in os.listdir(os.path.dirname(__file__) + "/BackEnd/InstanceProblem/Instances/TSP")]
+    names = {
+        'cvrp':{},
+        'tsp':{}
+    }
+    j = 1
+    for i in files_cvrp:
+        names['cvrp'][j] = i
+        j += 1
+    j = 0
+    for i in files_tsp:
+        names['tsp'][j] = i
+        j += 1
+    return names
+
 
 def main():
     port = int(os.environ.get("PORT", 5000))

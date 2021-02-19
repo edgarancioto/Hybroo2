@@ -10,7 +10,6 @@ from werkzeug.serving import run_simple
 import json
 from flask_cors import CORS
 
-
 function_selected_object = None
 function_mode = None
 function_info = []
