@@ -31,13 +31,14 @@ def functions_details():
 def functions_details_img():
     try:
         function_id = int(request.args.get('id'))
-        i, _ = find_function_by_id(function_id)
+        i, obj = find_function_by_id(function_id)
         return {
             'id': i['id'],
-            'img': ('http://latex.codecogs.com/png.latex?'+function_selected_object.get_format_expression()).replace(' ','')
-        }
+            'img': ('http://latex.codecogs.com/png.latex?'+obj.get_format_expression()).replace(' ','')
+        }    
     except:
         return "<h1>NOT FOUND</h1>"
+    
 
 def find_function_by_id(id):
     file_data = open(os.path.dirname(__file__) + "/CODE/JSON/functions-details.json", 'r')
