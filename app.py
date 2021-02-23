@@ -51,6 +51,12 @@ def find_function_by_id(id):
     raise Exception("Index out of bounds")
 
 
+@app.route('/functions-methods')
+def functions_methods():
+    file_data = open(os.path.dirname(__file__) + "/CODE/JSON/functions-methods.json", 'r')
+    return json.loads(file_data.read())
+
+
 ################## INSTANCES #####################
 @app.route('/instances-names')
 def instances_names():
@@ -97,6 +103,12 @@ def instances_details_best():
         return send_file(os.path.dirname(__file__) + "/CODE/IMAGES/BEST/"+instance_name)
     except:
         return "<h1>NOT FOUND</h1>"
+
+
+@app.route('/instances-methods')
+def instances_methods():
+    file_data = open(os.path.dirname(__file__) + "/CODE/JSON/instances-methods.json", 'r')
+    return json.loads(file_data.read())
 
 
 def main():

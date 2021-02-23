@@ -1,0 +1,81 @@
+{
+    "ga":{
+        "id":1,
+        "name": "Genetic Algorithm",
+        "approach": "HYBRID",
+        "description": "Is a metaheuristic inspired by the process of natural selection that belongs to the larger class of Evolutionary Algorithms (EA). Genetic algorithms are commonly used to generate high-quality solutions to optimization and search problems by relying on biologically inspired operators such as mutation, crossover and selection.", 
+        "fields":[
+            {
+                "label": "Population Size",
+                "type": "number",
+                "default": 50,
+                "min": 1,
+                "step":1
+            },
+            {
+                "label": "Generation Count",
+                "type": "number",
+                "default": 1000,
+                "min": 1,
+                "step":1
+            },
+            {
+                "label": "Crossover Rate",
+                "type": "number",
+                "default": 0.8,
+                "min": 0,
+                "step":0.1
+            },
+            {
+                "label": "Mutation Rate",
+                "type": "number",
+                "default": 0.05,
+                "min": 0,
+                "step":0.1
+            },
+            {
+                "label": "Elitism Rate",
+                "type": "number",
+                "default": 0.15,
+                "min": 0,
+                "step":0.1
+            }
+        ]
+    },
+    "sa":{
+        "id":2,
+        "name": "Simulated Annealing",
+        "approach": "HYBRID",
+        "description": "The simulated annealing algorithm is an optimization method which mimics the slow cooling of metals, which is characterized by a progressive reduction in the atomic movements that reduce the density of lattice defects until a lowest-energy state is reached.", 
+        "fields":[
+            {
+                "label": "T",
+                "type": "number",
+                "default": 10000,
+                "min": 0,
+                "step":1
+            },
+            {
+                "label": "Alpha",
+                "type": "number",
+                "default": 0.999,
+                "min": 0,
+                "step":0.001
+            },
+            {
+                "label": "Tolerance",
+                "type": "number",
+                "default": 1e-10,
+                "min": 1e-50,
+                "step":1e-10
+            },
+            {
+                "label": "Iterations",
+                "type": "number",
+                "default": 50000,
+                "min": 1,
+                "step":1
+            }
+        ]
+    }
+}

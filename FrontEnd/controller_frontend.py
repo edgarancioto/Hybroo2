@@ -25,12 +25,6 @@ def get_app():
     def home():
         return render_template('index.html')
 
-    @app.route('/functions')
-    def functions():
-        function_names = json.load(open(os.path.dirname(__file__) + "/" + os.pardir + "/BackEnd/FunctionProblem/Functions/functions-names.json"))
-        #function_names = json.load(open(os.path.dirname(__file__) + "/" + os.pardir + "/BackEnd/FunctionProblem/Functions/functions.json"))
-        return function_names
-
     @app.route('/calling_function')
     def calling_function():
         try:
@@ -287,20 +281,3 @@ def start_system_local():
 def start_system_server(ip):
     application = AppReload(get_app)
     run_simple(ip, 5000, application, use_reloader=True, use_debugger=True, use_evalex=True, threaded=True)
-"""
-
-app = Flask(__name__)
-cors = CORS(app, resource={r"/*":{"origins":"*"}})
-
-
-app.route("/", methods=['GET'])
-def index():
-    return "<h1>hello world</h1>"
-
-
-def main():
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host="0.0.0.0", port=port)
-
-if __name__ == "__main__":
-    main()
