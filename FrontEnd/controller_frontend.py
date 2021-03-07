@@ -21,45 +21,6 @@ def get_app():
     app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
     app.debug = True
 
-    @app.route('/')
-    def home():
-        return render_template('index.html')
-
-    @app.route('/calling_function')
-    def calling_function():
-        try:
-            function_selected = request.args.get('function_selected')
-        except KeyError:
-            flash('A function must be selected!')
-            return redirect(url_for('.functions'))
-        return redirect(url_for('.function_details', function_selected=function_selected))
-
-    @app.route('/function_details')
-    def function_details():
-        function_selected = request.args.get('function_selected')
-        function_selected_object = None
-        with open(os.path.dirname(__file__) + "/" + os.pardir + "/BackEnd/FunctionProblem/Functions/functions.txt") as f:
-            while True:
-                line = f.readline()
-                if line == "":
-                    break
-                if line.startswith(function_selected):
-                    function_selected_object = FUNCTION.Function()
-                    function_selected_object.build_function(line)
-        function_info = [function_selected_object.name, function_selected_object.expr_original, function_selected_object.dimensions, function_selected_object.domain, function_selected_object.location, function_selected_object.best, function_selected_object.constants, function_selected_object.descriptions, function_selected_object.get_format_expression()]
-        return render_template('2_function_detail.html', function_info=function_info)
-
-    @app.route('/function_methods')
-    def function_methods():
-        try:
-            dimensions = int(request.args.get('dimensions'))
-            return render_template('3_function_methods.html', function_latex=request.args['function_latex'], dimensions=dimensions, function_name=request.args['function_name'])
-        except ValueError:
-            flash('The dimensions of function must be informed!')
-            return redirect(url_for('.functions'))
-        except KeyError:
-            pass
-
     @app.route('/function_results')
     def function_results():
         args = {}

@@ -13,9 +13,9 @@ class GA(object):
 
         self.population_size = parameter[0]
         self.generation = parameter[1]
-        self.elite_count = parameter[2]
-        self.crossover_rate = parameter[3]
-        self.mutation_rate = parameter[4]
+        self.crossover_rate = parameter[2]
+        self.mutation_rate = parameter[3]
+        self.elite_count = parameter[4]
         self.hybrid_individual = parameter[5]
 
     def solve(self, func):
