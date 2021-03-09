@@ -38,7 +38,7 @@ class GA(object):
             self.generation_results.append(self.chromosome_list[0])
             self.fitness_list.append(self.chromosome_list[0].get_func_value())
             self.new_chromosome()
-        return self.fitness_list, self.generation_results[-1].bits_values, self.generation_results[-1].real_values, self.generation_results[-1].func_value
+        return self.generation_results[-1].bits_values, self.fitness_list, self.generation_results[-1].real_values, self.generation_results[-1].func_value
 
     def population_create(self):
         for i in range(self.population_size):

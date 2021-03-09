@@ -47,7 +47,7 @@ class SA(object):
             self.solution_list.append(self.current_solution)
 
         fitness_list = [i.func_value for i in self.solution_list]
-        return fitness_list, self.best_solution.bits_values, self.best_solution.real_values, self.best_solution.func_value
+        return self.best_solution.bits_values, fitness_list, self.best_solution.real_values, self.best_solution.func_value
 
     def random_initial_solution(self):
         bits = []
