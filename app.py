@@ -1,15 +1,16 @@
 from CODE.OBJECTS import FUNCTION, INSTANCE
 from CODE.METHODS import EXECUTION_CONTROL
 
-from flask import Flask, request, send_file, render_template
+from flask import Flask, request, send_file, render_template, make_response, redirect
 from flask_cors import CORS
-from flask_socketio import SocketIO, emit
+from flask_socketio import SocketIO, emit, send
 from sympy import latex, sympify
 
 import os
 import json
+
 """
-#cors = CORS(app, resource={r"/*":{"origins": "*"}})
+
 
 @socketio.on('my event')
 def handle_my_custom_event():
@@ -136,32 +137,18 @@ def main():
 if __name__ == "__main__":
     main()"""
 
-    
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'secret!'
 socketio = SocketIO(app)
 
 @app.route('/')
 def index():
     return render_template('index.html')
 
-@socketio.on('functions-names')
-def functions_names(a):
-    print("func-name", a['data'])
-    file_data = open(os.path.dirname(__file__) + "/CODE/JSON/functions-names.json", 'r')
-    emit('response', {'data': json.loads(file_data.read())})
-   
-@socketio.event
-def my_event(message):
-    emit('my_response', {'data': 'got it!'})
-
-@socketio.on('messages')
-def message(a):
-    print('Message from client: ', a)
-    my_event('response')
-
-if __name__ == '__main__':
-    port = int(os.environ.get("PORT", 5000))
-    socketio.run(app, debug=True)
+@socketio.on("message")
+def handleMessage(data):
+    emit("new_message",data,broadcast=True)
+    
+if __name__ == "__main__":
+    socketio.run(app, debug=True, host='0.0.0.0', port=5004)
 
 
