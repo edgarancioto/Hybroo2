@@ -136,8 +136,6 @@ def main():
 if __name__ == "__main__":
     main()"""
 
-
-
     
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
@@ -163,5 +161,6 @@ def message(a):
     my_event('response')
 
 if __name__ == '__main__':
-    socketio.run(app, debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    socketio.run(app,host="0.0.0.0", port=port, debug=True)
 
