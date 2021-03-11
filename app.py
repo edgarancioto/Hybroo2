@@ -149,7 +149,7 @@ def index():
 def functions_names(a):
     print("func-name", a['data'])
     file_data = open(os.path.dirname(__file__) + "/CODE/JSON/functions-names.json", 'r')
-    emit('functions-names', {'data': json.loads(file_data.read())})
+    emit('response', {'data': json.loads(file_data.read())})
    
 @socketio.event
 def my_event(message):
