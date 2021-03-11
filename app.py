@@ -10,13 +10,6 @@ import os
 import json
 
 """
-
-
-@socketio.on('my event')
-def handle_my_custom_event():
-    print('received json: ')
-
-
 @app.route("/", methods=['GET'])
 def index():
     return "<h1>HYBROO !</h1>"
@@ -143,6 +136,12 @@ socketio = SocketIO(app)
 @app.route('/')
 def index():
     return render_template('index.html')
+
+@socketio.on('functions-names')
+def functions_names(data):
+    print("aqui")
+    file_data = open(os.path.dirname(__file__) + "/CODE/JSON/functions-names.json", 'r')
+    emit("new_message",json.loads(file_data.read()),broadcast=True)
 
 @socketio.on("message")
 def handleMessage(data):
