@@ -1,20 +1,13 @@
 from CODE.OBJECTS import FUNCTION, INSTANCE
 from CODE.METHODS import EXECUTION_CONTROL
-
-from flask import Flask, request, send_file, render_template
+from flask import Flask, request, send_file
 from flask_cors import CORS
-from flask_socketio import SocketIO, emit
 from sympy import latex, sympify
-
 import os
 import json
-"""
-#cors = CORS(app, resource={r"/*":{"origins": "*"}})
 
-@socketio.on('my event')
-def handle_my_custom_event():
-    print('received json: ')
-
+app = Flask(__name__)
+cors = CORS(app, resource={r"/*":{"origins": "*"}})
 
 @app.route("/", methods=['GET'])
 def index():
@@ -99,7 +92,6 @@ def instances_details():
         return instance.json()
     except:
         return "<h1>NOT FOUND</h1>"
-   
 
 @app.route('/instances-details-coord')
 def instances_details_coord():
@@ -109,7 +101,6 @@ def instances_details_coord():
     except:
         return "<h1>NOT FOUND</h1>"
 
-
 @app.route('/instances-details-best')
 def instances_details_best():
     try:
@@ -118,50 +109,14 @@ def instances_details_best():
     except:
         return "<h1>NOT FOUND</h1>"
 
-
 @app.route('/instances-methods')
 def instances_methods():
     file_data = open(os.path.dirname(__file__) + "/CODE/JSON/instances-methods.json", 'r')
     return json.loads(file_data.read())
 
-
 def main():
     port = int(os.environ.get("PORT", 5000))
-    # app.run(host="0.0.0.0", port=port, debug=True)
-    print(1)
-    socketio.run(app,host="0.0.0.0", port=port)
-    print(2)
-
+    app.run(host="0.0.0.0", port=port, debug=True)
 
 if __name__ == "__main__":
     main()"""
-
-
-
-    
-app = Flask(__name__)
-app.config['SECRET_KEY'] = 'secret!'
-socketio = SocketIO(app)
-
-@app.route('/')
-def index():
-    return render_template('index.html')
-
-@socketio.on('functions-names')
-def functions_names(a):
-    print("func-name", a['data'])
-    file_data = open(os.path.dirname(__file__) + "/CODE/JSON/functions-names.json", 'r')
-    emit('functions-names', {'data': json.loads(file_data.read())})
-   
-@socketio.event
-def my_event(message):
-    emit('my_response', {'data': 'got it!'})
-
-@socketio.on('messages')
-def message(a):
-    print('Message from client: ', a)
-    my_event('response')
-
-if __name__ == '__main__':
-    socketio.run(app, debug=True)
-
