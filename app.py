@@ -162,6 +162,6 @@ def message(a):
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
-    socketio.run(app, '0.0.0.0', port, debug=True)
+    socketio.run(app, debug=True)
 
 
