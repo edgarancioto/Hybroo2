@@ -131,6 +131,7 @@ if __name__ == "__main__":
     main()"""
 
 app = Flask(__name__)
+cors = CORS(app, resource={r"/*":{"origins": "*"}})
 socketio = SocketIO(app)
 
 @app.route('/')
