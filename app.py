@@ -35,4 +35,4 @@ def on_connect():
 if __name__ == '__main__':
     print('main')
     sys.stdout.flush()
-    socketio.run(app)
+    socketio.run(app, debug=True)
