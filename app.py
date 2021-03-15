@@ -16,6 +16,7 @@ def index():
 
 @app.route('/functions-names')
 def api():
+    print('api()')
     query = dict(request.args)
     socketio.emit('log', dict(data=str(query)), broadcast=True)
     return jsonify(dict(success=True, message='Received'))
@@ -23,9 +24,11 @@ def api():
 
 @socketio.on('connect')
 def on_connect():
+    print('on_connect()')
     payload = dict(data='Connected')
     emit('log', payload, broadcast=True)
 
 
 if __name__ == '__main__':
+    print('main')
     socketio.run(app)
