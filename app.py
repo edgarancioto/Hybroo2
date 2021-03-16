@@ -20,19 +20,22 @@ def api():
     print('api()')
     sys.stdout.flush()
     query = dict(request.args)
-    socketio.emit('log', dict(data=str(query)), broadcast=True)
+    emit('edgar', 'dict(data=str(query))', broadcast=True)
     return jsonify(dict(success=True, message='Received'))
 
 
-@socketio.on('connect')
+@socketio.on('my event')
 def on_connect():
     print('on_connect()')
-    sys.stdout.flush()
     payload = dict(data='Connected')
-    emit('log', payload, broadcast=True)
+    emit('edgar', payload, broadcast=True)
 
+
+@socketio.on("message")
+def handleMessage(data):
+    print('a')
+    emit("new_message",data,broadcast=True)
 
 if __name__ == '__main__':
     print('main')
-    sys.stdout.flush()
     socketio.run(app, debug=True)
