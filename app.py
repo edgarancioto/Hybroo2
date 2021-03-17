@@ -9,8 +9,6 @@ import websockets
 connected = set()
 
 def functions_names():
-    files_cvrp = [os.path.basename(x) for x in os.listdir(os.path.dirname(__file__))]
-    return files_cvrp
     file_data = open("/CODE/JSON/functions-names.json", 'r')
     return json.loads(file_data.read())
 
