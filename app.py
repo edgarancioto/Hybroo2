@@ -1,41 +1,27 @@
-from flask import Flask, render_template, request, jsonify
-from flask_socketio import SocketIO, emit
-from flask_cors import CORS
-import sys
+from CODE.OBJECTS import FUNCTION, INSTANCE
+from CODE.METHODS import EXECUTION_CONTROL
+from sympy import latex, sympify
+import os
+import json
+import asyncio
+import websockets
 
-app = Flask(__name__)
-app.config['SECRET_KEY'] = 'secret!'
+connected = set()
 
-socketio = SocketIO(app)
-CORS(app)
+def functions_names():
+    file_data = open(os.path.dirname(__file__) + "/CODE/JSON/functions-names.json", 'r')
+    return json.loads(file_data.read())
 
-
-@app.route('/')
-def index():
-    return render_template('index.html')
-
-
-@app.route('/functions-names')
-def api():
-    print('api()')
-    sys.stdout.flush()
-    query = dict(request.args)
-    emit('edgar', 'dict(data=str(query))', broadcast=True)
-    return jsonify(dict(success=True, message='Received'))
-
-
-@socketio.on('my event')
-def on_connect():
-    print('on_connect()')
-    payload = dict(data='Connected')
-    emit('edgar', payload, broadcast=True)
-
-
-@socketio.on("message")
-def handleMessage(data):
-    print('a')
-    emit("new_message",data,broadcast=True)
-
-if __name__ == '__main__':
-    print('main')
-    socketio.run(app, debug=True)
+async def server(websocket, path):
+    connected.add(websocket)
+    try:
+        async for message in websocket:
+            for conn in connected:
+                if conn == websocket:
+                    await conn.send(json.dumps(globals()[message]()))
+    finally:
+        connected.remove(websocket)
+        
+start_server = websockets.serve(server, "0.0.0.0", 5000)
+asyncio.get_event_loop().run_until_complete(start_server)
+asyncio.get_event_loop().run_forever()
