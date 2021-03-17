@@ -9,6 +9,7 @@ import websockets
 connected = set()
 
 def functions_names():
+    return os.path.dirname(__file__)
     file_data = open(os.path.dirname(__file__) + "/HYBROO2/CODE/JSON/functions-names.json", 'r')
     return json.loads(file_data.read())
 
