@@ -1,2 +1,2 @@
-web: gunicorn --pythonpath app app.wsgi
+web: gunicorn --bind 0.0.0.0:$PORT run:app
 web: python app.py
