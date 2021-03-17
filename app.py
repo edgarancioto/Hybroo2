@@ -22,6 +22,6 @@ async def server(websocket, path):
     finally:
         connected.remove(websocket)
         
-start_server = websockets.serve(server, "0.0.0.0", 5000)
+start_server = websockets.serve(server, "0.0.0.0")
 asyncio.get_event_loop().run_until_complete(start_server)
 asyncio.get_event_loop().run_forever()
