@@ -13,7 +13,7 @@ def functions_names():
     return json.loads(file_data.read())
 
 async def server(websocket, path):
-    connected.add(websocket)
+    connected.add(websocket) 
     try:
         async for message in websocket:
             for conn in connected:
