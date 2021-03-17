@@ -9,7 +9,12 @@ import websockets
 connected = set()
 
 def functions_names():
-    file_data = open(os.path.dirname(__file__) + "/CODE/JSON/functions-names.json", 'r')
+    try:
+        file_data = open(os.path.dirname(__file__) + "/CODE/JSON/functions-names.json", 'r')
+    except FileNotFoundError as fe:
+        print(fe)
+        file_data = open(fe)
+
     return json.loads(file_data.read())
 
 async def server(websocket, path):
