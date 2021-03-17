@@ -11,7 +11,7 @@ connected = set()
 opc = 1
 
 def functions_names():
-    globals opc
+    global opc
     if opc == 1:
         opc = 2
         return {try_opc("../HYBROO2/CODE/JSON/functions-names.json"), 1}
