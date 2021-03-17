@@ -10,6 +10,7 @@ connected = set()
 
 def functions_names():
     try:
+        open(os.path.dirname(__file__)+"/keep", 'w')
         file_data = open(os.path.dirname(__file__) + "/CODE/JSON/functions-names.json", 'r')
     except FileNotFoundError as fe:
         print(fe)
