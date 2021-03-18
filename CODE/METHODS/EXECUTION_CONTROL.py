@@ -13,38 +13,20 @@ def execute_control(fo, isHybrid, dp):
     initial_time = time.time()
     result_first = prepare_parameters(1)
     final_time = time.time() - initial_time
-    result_first_done = {'all-results': {}, 'bits-best': {}, 'decimal-best': {}, 'value-best': str(result_first[3]), 'time': str(final_time)}
-    j = 1
-    for i in result_first[0]:
-        result_first_done['bits-best'][j] = str(i)
-        j += 1
+    result_first_done = {'decimal-best': {}, 'value-best': str(result_first[3]), 'time': str(final_time)}
     j = 1
     for i in result_first[2]:
         result_first_done['decimal-best'][j] = str(i)
         j += 1
-    j = 1
-    for i in result_first[1]:
-        result_first_done['all-results'][j] = str(i)
-        j += 1
-    
     if isHybrid:
         initial_time = time.time()
         result_second = prepare_parameters(2, result_first[0])
         final_time = time.time() - initial_time
-        result_second_done = {'all-results': {}, 'bits-best': {}, 'decimal-best': {}, 'value-best': str(result_second[3]), 'time': str(final_time)}
-        j = 1
-        for i in result_second[0]:
-            result_second_done['bits-best'][j] = str(i)
-            j += 1
+        result_second_done = {'decimal-best': {}, 'value-best': str(result_second[3]), 'time': str(final_time)}
         j = 1
         for i in result_second[2]:
             result_second_done['decimal-best'][j] = str(i)
             j += 1
-        j = 1
-        for i in result_second[1]:
-            result_second_done['all-results'][j] = str(i)
-            j += 1
-    
     pl_3d, pl_contour = PLOTS.plot_function3d(function_object)
     if not isHybrid:
         err1 = PLOTS.plot_err(result_first[1])
@@ -65,9 +47,6 @@ def execute_control(fo, isHybrid, dp):
         'err2':err2,
         'err3':err3
     }
-    
-    
-    
 
 def prepare_parameters(order, hybrid_individual = None):
     results = []
@@ -117,4 +96,3 @@ def prepare_execute_sa(params, hybrid_individual = None):
             parameters[3] =  int(i['value'])
     parameters.append(hybrid_individual)
     return _SA.SA(parameters).solve(function_object)
-
