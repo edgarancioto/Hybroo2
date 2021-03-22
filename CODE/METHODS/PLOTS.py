@@ -1,16 +1,13 @@
-import os
-from sympy.plotting import plot3d
-from sympy.plotting.plot import Plot, ContourSeries
-from mpl_toolkits.mplot3d import Axes3D
-import matplotlib.pyplot as plt
-from matplotlib import image as mpimg
-import numpy as np
-
-from PIL import Image
-from base64 import b64encode
 import io
+import numpy as np
+from base64 import b64encode
+from mpl_toolkits.mplot3d import Axes3D
 
 def plot_function3d(function_object):
+    from sympy.plotting import plot3d
+    from sympy.plotting.plot import Plot, ContourSeries
+    import matplotlib.pyplot as plt
+
     if function_object.dimensions == 2:
         plot_3d = plot3d(function_object.formulation, ('x', function_object.domain[0][0], function_object.domain[0][1]),
                          ('y', function_object.domain[1][0], function_object.domain[1][1]), show=False)
@@ -34,32 +31,34 @@ def plot_function3d(function_object):
         fig = plt.figure(figsize=(6.4, 4.8))
 
         fig.gca(projection='3d').plot_surface(x, y, z, cmap=cm.viridis, linewidth=0, antialiased=False)
-        pl_3d = convert_fig_mat()
+        pl_3d = convert_fig_mat(plt)
 
         fig.gca(projection='3d').contour(x, y, z, cmap=cm.viridis, antialiased=False)
-        pl_contour = convert_fig_mat()
+        pl_contour = convert_fig_mat(plt)
     
     return pl_3d, pl_contour
 
 def plot_err(fitness_list_1, fitness_list_2):
-    plt.figure(figsize=(10, 10))
+    import matplotlib.pyplot as plt
+
+    #plt.figure(figsize=(10, 10))
     plt.grid(True)
     plt.ylabel('Solution')
     plt.xlabel('Iterations')
     plt.plot(fitness_list_1, linestyle='--', color='blue', linewidth=3)
-    err1 = convert_fig_mat()
+    err1 = convert_fig_mat(plt)
 
     if fitness_list_2 is None:
         return err1
    
-    plt.figure(figsize=(10, 10))
+    #plt.figure(figsize=(10, 10))
     plt.grid(True)
     plt.ylabel('Solution')
     plt.xlabel('Iterations')
     plt.plot(fitness_list_2, linestyle='--', color='orange', linewidth=3)
-    err2 = convert_fig_mat()
+    err2 = convert_fig_mat(plt)
     
-    plt.figure(figsize=(10, 10))
+    #plt.figure(figsize=(10, 10))
     plt.grid(True)
     plt.ylabel('Solution')
     plt.xlabel('Iterations')
@@ -74,10 +73,10 @@ def plot_err(fitness_list_1, fitness_list_2):
         plt.annotate('%.3f' % fitness_list_1[-1], (len(fitness_list_1), fitness_list_1[-1]), xytext=(-100, 90),
             textcoords='offset points', bbox=dict(boxstyle="round", fc="0.8"), 
             arrowprops=dict(arrowstyle="->", connectionstyle="angle,angleA=0,angleB=135,rad=10"))
-    err3 = convert_fig_mat()
+    err3 = convert_fig_mat(plt)
     return [err1, err2, err3]
 
-def convert_fig_mat():
+def convert_fig_mat(plt):
     pic_IObytes = io.BytesIO()
     plt.savefig(pic_IObytes,  format='png')
     pic_IObytes.seek(0)

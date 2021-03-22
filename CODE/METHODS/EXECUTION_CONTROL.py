@@ -9,35 +9,41 @@ def execute_control(fo, isHybrid, dp):
     global function_object, data_post
     function_object = fo
     data_post = dp
-
+    
     initial_time = time.time()
     result_first = prepare_parameters(1)
     final_time = time.time() - initial_time
     result_first_done = {'decimal-best': {}, 'value-best': str(result_first[3]), 'time': str(final_time)}
+    
     j = 1
     for i in result_first[2]:
         result_first_done['decimal-best'][j] = str(i)
         j += 1
+    
     if isHybrid:
         initial_time = time.time()
         result_second = prepare_parameters(2, result_first[0])
         final_time = time.time() - initial_time
         result_second_done = {'decimal-best': {}, 'value-best': str(result_second[3]), 'time': str(final_time)}
+        
         j = 1
         for i in result_second[2]:
             result_second_done['decimal-best'][j] = str(i)
             j += 1
+    
     pl_3d, pl_contour = PLOTS.plot_function3d(function_object)
+    
     if not isHybrid:
         err1 = PLOTS.plot_err(result_first[1])
         return {
             'result-first':result_first_done,
-            'result-second':result_second_done,
             '3d': pl_3d,
             'contour': pl_contour,
             'err1':err1
         }
+
     err1, err2, err3 = PLOTS.plot_err(result_first[1], result_second[1])
+    
     return {
         'result-first':result_first_done,
         'result-second':result_second_done,
