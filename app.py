@@ -48,12 +48,15 @@ class Main():
 
     @classmethod
     async def functions_names(cls, conn):
-        return json.loads(open("./CODE/JSON/functions-names.json", 'r').read())
+        j = json.loads(open("./CODE/JSON/functions-names.json", 'r').read())
+        j['task'] = 'functions_names'
+        return j
 
     @classmethod
     async def functions_details(cls, conn, params):
         try:
             i, _ = Main.find_function_by_id(int(params['function_id']))
+            i['task'] = 'functions_details'
             return i
         except:
             return "<h1>NOT FOUND</h1>"
@@ -62,13 +65,15 @@ class Main():
     async def functions_details_img(cls, conn, params):
         try:
             i, obj = Main.find_function_by_id(int(params['function_id']))
-            return { 'id': i['id'], 'img': ('http://latex.codecogs.com/svg.latex?'+obj.get_format_expression()).replace(' ','')}    
+            return { 'id': i['id'],'task': 'functions_details_img', 'img': ('http://latex.codecogs.com/svg.latex?'+obj.get_format_expression()).replace(' ','')}    
         except:
             return "<h1>NOT FOUND</h1>"
 
     @classmethod
     async def functions_methods(cls, conn):
-        return json.loads(open(os.path.dirname(__file__) + "./CODE/JSON/functions-methods.json", 'r').read())
+        j = json.loads(open(os.path.dirname(__file__) + "./CODE/JSON/functions-methods.json", 'r').read())
+        j['task'] = 'functions_methods'
+        return j
 
     @classmethod
     async def functions_solver(cls, conn, params):
@@ -76,7 +81,9 @@ class Main():
         _, function_obj = cls.find_function_by_id(int(params['function_id']))
         function_obj.set_n_dimension(int(params['dimension']))
         await conn.send('Stars a new execution to - '+str(conn))
-        return json.dumps(await cls.loop.run_in_executor(None, EXECUTION_CONTROL.execute_control, function_obj, isHybrid, params))
+        j = await cls.loop.run_in_executor(None, EXECUTION_CONTROL.execute_control, function_obj, isHybrid, params)
+        j['task'] = 'functions_solver'
+        return j
 
 if __name__ == "__main__":
     Main().run()

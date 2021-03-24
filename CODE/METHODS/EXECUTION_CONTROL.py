@@ -1,5 +1,5 @@
 from CODE.METHODS.FUNCTIONS import _GA, _SA
-from CODE.METHODS import PLOTS
+from CODE.METHODS.PLOTS import PLots
 import time
 
 function_object = None
@@ -31,6 +31,8 @@ def execute_control(fo, isHybrid, dp):
             result_second_done['decimal-best'][j] = str(i)
             j += 1
     
+    PLOTS = PLots()
+
     pl_3d, pl_contour = PLOTS.plot_function3d(function_object)
     
     if not isHybrid:
