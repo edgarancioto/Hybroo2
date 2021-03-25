@@ -77,6 +77,7 @@ class Main():
 
     @classmethod
     async def functions_solver(cls, conn, params):
+        print(params)
         isHybrid = bool(params['isHybrid'])
         _, function_obj = cls.find_function_by_id(int(params['function_id']))
         function_obj.set_n_dimension(int(params['dimension']))
