@@ -77,10 +77,12 @@ class Main():
 
     @classmethod
     async def functions_solver(cls, conn, params):
+        params = params['collectionData']
         print(params)
         isHybrid = bool(params['isHybrid'])
-        _, function_obj = cls.find_function_by_id(int(params['function_id']))
-        function_obj.set_n_dimension(int(params['dimension']))
+        _, function_obj = cls.find_function_by_id(int(params['problem']))
+        if function_obj.multidimensional:
+            function_obj.set_n_dimension(int(params['dimension']))
         await conn.send('Stars a new execution to - '+str(conn))
         j = await cls.loop.run_in_executor(None, EXECUTION_CONTROL.execute_control, function_obj, isHybrid, params)
         j['task'] = 'functions_solver'
