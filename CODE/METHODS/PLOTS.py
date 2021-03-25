@@ -1,25 +1,12 @@
 import io
 import numpy as np
 from base64 import b64encode
-from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 from sympy.plotting import plot3d
 from sympy.plotting.plot import Plot, ContourSeries
-import matplotlib.pyplot as plt
 
 class PLots():
-
-    """queue_plots = queue.Queue()
-    
-    
-    def item_receive(cls, type_plot, params):
-        print('\nreceiving')
-        await cls.queue.put({'type':type_plot, 'params':params})
-        print(cls.queue)
-
-        #await asyncio.get_event_loop().run_in_executor(None, cls.item_execute)
-
-    """
 
     def plot_function3d(cls, function_object):
         if function_object.dimensions == 2:
@@ -52,7 +39,7 @@ class PLots():
         
         return pl_3d, pl_contour
 
-    def plot_err(cls, fitness_list_1, fitness_list_2):
+    def plot_err(cls, fitness_list_1, fitness_list_2 = None):
 
         #plt.figure(figsize=(10, 10))
         plt.grid(True)
