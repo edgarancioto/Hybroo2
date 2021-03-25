@@ -85,8 +85,8 @@ class Main():
         await conn.send(json.dumps({'data':'Stars a new execution', 'task':'functions_solver'}))
         j = await cls.loop.run_in_executor(None, EXECUTION_CONTROL.execute_control, function_obj, isHybrid, params)
         j['task'] = 'functions_solver'
-        await conn.send(j)
-        return None
+        await conn.send(json.dumps(j))
+        return json.dumps({'data':'Finishing the execution', 'task':'functions_solver'})
 
 if __name__ == "__main__":
     Main().run()
