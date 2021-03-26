@@ -83,8 +83,9 @@ class Main():
         if function_obj.multidimensional:
             function_obj.set_n_dimension(int(params['dimension']))
         await conn.send(json.dumps({'data':'Stars a new execution', 'task':'functions_solver'}))
-        j = await cls.loop.run_in_executor(None, EXECUTION_CONTROL.execute_control, function_obj, isHybrid, params)
-        j['task'] = 'functions_solver'
+        j = {}
+        j['data'] = await cls.loop.run_in_executor(None, EXECUTION_CONTROL.execute_control, function_obj, isHybrid, params)
+        j['task'] = 'functions_solver_results'
         await conn.send(json.dumps(j))
         return {'data':'Finishing the execution', 'task':'functions_solver'}
 
