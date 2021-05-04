@@ -1,12 +1,16 @@
 import io
 import numpy as np
 from base64 import b64encode
+from matplotlib import cm
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 from sympy.plotting import plot3d
 from sympy.plotting.plot import Plot, ContourSeries
 
+
 class PLots():
+    plt.rcParams.update({'font.size': 16})
+    plt.rcParams.update({'figure.max_open_warning': 0})
 
     def plot_function3d(cls, function_object):
         if function_object.dimensions == 2:
@@ -30,12 +34,17 @@ class PLots():
             z = np.array(z)
             z = z.reshape((len(x), len(y)))
             fig = plt.figure(figsize=(6.4, 4.8))
-
-            fig.gca(projection='3d').plot_surface(x, y, z, cmap=cm.viridis, linewidth=0, antialiased=False)
-            pl_3d = cls.convert_fig_mat()
-
-            fig.gca(projection='3d').contour(x, y, z, cmap=cm.viridis, antialiased=False)
-            pl_contour = cls.convert_fig_mat()
+            print(x, y, z)
+            try:
+                fig.gca(projection='3d').plot_surface(x, y, z, cmap=cm.viridis, linewidth=0, antialiased=False)
+                pl_3d = cls.convert_fig_mat()
+            except:
+                pl_3d = 'The graph could not be generated.'
+            try:
+                fig.gca(projection='3d').contour(x, y, z, cmap=cm.viridis, antialiased=False)
+                pl_contour = cls.convert_fig_mat()
+            except:
+                pl_contour = 'The graph could not be generated.'
         
         return pl_3d, pl_contour
 

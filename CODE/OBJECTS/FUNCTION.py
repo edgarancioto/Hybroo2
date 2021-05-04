@@ -1,4 +1,7 @@
-from sympy import sympify, lambdify, latex, Symbol
+from sympy import sympify, latex, Symbol
+from sympy.utilities.lambdify import lambdify, lambdastr
+from sympy.abc import x
+
 import ast
 
 
@@ -18,24 +21,24 @@ class Function(object):
 
     def __str__(self):
         return """Id: %s \nName: %s \nFormulation : %s \nDimensions: %s \nDomain: %s \nLocation: %s \nBest: %s \nParameters: %s \nDescription: %s \n""" % \
-               (self.id, self.name, self.formulation, self.dimensions, self.domain, self.location, self.best, self.parameters, self.description)
+               (self.id, self.name, self.formulation, self.dimensions, self.domain, self.location, self.best, self.constants, self.description)
 
     def build_function(self, data_function):
         self.id = data_function['id']
         self.name = data_function['name']
         self.description = data_function['description']
         self.formulation = data_function['formulation']
-        self.parameters = None if data_function['parameters'] =='None' else data_function['parameters']
+        self.constants = None if data_function['constants'] =='None' else data_function['constants']
         self.domain = data_function['domain']
         self.location = data_function['location']
         self.best = data_function['best']
 
         self.dimensions = self.convert_value(self.description.split(',')[0].split('-')[0])
         
-        if self.parameters is not None:
-            self.parameters = ast.literal_eval(self.parameters)
-            for i in self.parameters:
-                self.parameters[i] = self.convert_value(self.parameters[i])
+        if self.constants is not None:
+            self.constants = ast.literal_eval(self.constants)
+            for i in self.constants:
+                self.constants[i] = self.convert_value(self.constants[i])
 
         self.best = self.convert_value(self.best)
         self.domain = self.browse_vector(self.domain, self.dimensions)
@@ -99,14 +102,14 @@ class Function(object):
             return float(value)
         else:
             v.insert(0, None)
-            value = lambdify('x', value, ("math", "mpmath", "numpy", "sympy"))
+            value = lambdify(Symbol('x'), value, ("math", "mpmath", "numpy", "sympy"))
             return value(v)
 
     def calculate_to_print_n(self, v):
         value = self.formulation_original.subs('n', 2)
         try:
             v.insert(0, None)
-            value = lambdify('x', value, ("math", "mpmath", "numpy", "sympy"))
+            value = lambdify(Symbol('x'), value, ("math", "mpmath", "numpy", "sympy"))
             return value(v)
         except Exception as e:
             return float('inf')
