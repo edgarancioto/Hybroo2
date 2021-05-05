@@ -47,6 +47,12 @@ class Main():
         raise Exception("Index out of bounds")
 
     @classmethod
+    async def home_info(cls, conn):
+        j = json.loads(open("./CODE/JSON/home-page.json", 'r').read())
+        j['task'] = 'home_info'
+        return j
+
+    @classmethod
     async def functions_names(cls, conn):
         j = json.loads(open("./CODE/JSON/functions-names.json", 'r').read())
         j['task'] = 'functions_names'
