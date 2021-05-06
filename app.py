@@ -31,6 +31,8 @@ class Main():
     
     @classmethod
     async def call_tasks(cls, conn, string):
+        print('Test on call_tasks')
+        print(string)
         task = getattr(cls, string['task'])
         if string['params'] == 'None':
             return json.dumps(await task(conn))
