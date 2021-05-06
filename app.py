@@ -50,7 +50,7 @@ class Main():
 
     @classmethod
     async def home_info(cls, conn):
-        j = json.loads(open("./CODE/JSON/home-page.json", 'r').read())
+        j = json.loads(open("./CODE/JSON/home-page.json", 'r', encoding='utf-8').read())
         j['task'] = 'home_info'
         return j
 
