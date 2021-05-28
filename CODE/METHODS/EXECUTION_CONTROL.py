@@ -38,6 +38,9 @@ def execute_control(fo, isHybrid, dp):
     if not isHybrid:
         err1 = PLOTS.plot_err(result_first[1])
         return {
+            'problem':function_object.name,
+            'problem-description':str(function_object),
+            'isHybrid':isHybrid,
             'result-first':result_first_done,
             '3d': pl_3d,
             'contour': pl_contour,
@@ -47,13 +50,17 @@ def execute_control(fo, isHybrid, dp):
     err1, err2, err3 = PLOTS.plot_err(result_first[1], result_second[1])
     
     return {
+        'problem':function_object.name,
+        'problem-description':str(function_object),
+        'isHybrid':isHybrid,
         'result-first':result_first_done,
         'result-second':result_second_done,
         '3d': pl_3d,
         'contour': pl_contour,
         'err1':err1,
         'err2':err2,
-        'err3':err3
+        'err3':err3,
+        'hibridization-analysis':str('The FIRST hit the value SOMEVALUE in TIME seconds.\nStarting on the best found value, the SECOND *CONDITION got a improve DIFFERENCE in the solution, in TIME seconds. Hybridization reached a value of FINAL-VALUE in a total of FINAL-TIME seconds, considered a effective result, because one method support the other.')
     }
 
 def prepare_parameters(order, hybrid_individual = None):

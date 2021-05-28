@@ -49,8 +49,7 @@ class PLots():
         return pl_3d, pl_contour
 
     def plot_err(cls, fitness_list_1, fitness_list_2 = None):
-
-        #plt.figure(figsize=(10, 10))
+        plt.figure(figsize=(10, 10))
         plt.grid(True)
         plt.ylabel('Solution')
         plt.xlabel('Iterations')
@@ -60,14 +59,14 @@ class PLots():
         if fitness_list_2 is None:
             return err1
     
-        #plt.figure(figsize=(10, 10))
+        plt.figure(figsize=(10, 10))
         plt.grid(True)
         plt.ylabel('Solution')
         plt.xlabel('Iterations')
         plt.plot(fitness_list_2, linestyle='--', color='orange', linewidth=3)
         err2 = cls.convert_fig_mat()
         
-        #plt.figure(figsize=(10, 10))
+        plt.figure(figsize=(10, 10))
         plt.grid(True)
         plt.ylabel('Solution')
         plt.xlabel('Iterations')
@@ -98,4 +97,5 @@ class PLots():
         plot_3d.save(pic_IObytes)
         pic_IObytes.seek(0)
         pic_hash = b64encode(pic_IObytes.read())
+        plt.clf()
         return str(pic_hash)
