@@ -103,7 +103,7 @@ class Main():
         data['task'] = 'instances_names'
         for folder in os.listdir('./CODE/INSTANCES/'):
             data[folder] = os.listdir('./CODE/INSTANCES/'+folder)
-        return json.loads(data)
+        return json.loads(json.dumps(data))
 
     @classmethod
     async def instances_methods(cls, conn):
