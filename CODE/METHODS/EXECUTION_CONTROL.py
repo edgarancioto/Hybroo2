@@ -3,10 +3,12 @@ from CODE.METHODS.PLOTS import PLots
 import time
 
 function_object = None
-data_post = None
+instance_object = None
+data_function = None
+data_instance = None
 
-def execute_control(fo, isHybrid, dp):
-    global function_object, data_post
+def execute_function(fo, isHybrid, dp):
+    global function_object, data_function
     function_object = fo
     data_post = dp
     
@@ -66,19 +68,19 @@ def execute_control(fo, isHybrid, dp):
 def prepare_parameters(order, hybrid_individual = None):
     results = []
     if order == 1:
-        for i in data_post['firstMethod']:
+        for i in data_function['firstMethod']:
             if i['label'] == 'first-method':
                 if i['value'] == 'ga':
-                    results = prepare_execute_ga(data_post['firstMethod'], hybrid_individual)
+                    results = prepare_execute_ga(data_function['firstMethod'], hybrid_individual)
                 elif i['value'] == 'sa':
-                    results = prepare_execute_sa(data_post['firstMethod'], hybrid_individual)
+                    results = prepare_execute_sa(data_function['firstMethod'], hybrid_individual)
     else:
-        for i in data_post['secondMethod']:
+        for i in data_function['secondMethod']:
             if i['label'] == 'second-method':
                 if i['value'] == 'ga':
-                    results = prepare_execute_ga(data_post['secondMethod'], hybrid_individual)
+                    results = prepare_execute_ga(data_function['secondMethod'], hybrid_individual)
                 elif i['value'] == 'sa':
-                    results = prepare_execute_sa(data_post['secondMethod'], hybrid_individual)
+                    results = prepare_execute_sa(data_function['secondMethod'], hybrid_individual)
     return results
     
 def prepare_execute_ga(params, hybrid_individual = None):
@@ -111,3 +113,36 @@ def prepare_execute_sa(params, hybrid_individual = None):
             parameters[3] =  int(i['value'])
     parameters.append(hybrid_individual)
     return _SA.SA(parameters).solve(function_object)
+
+"""
+def execute_instance(instance, isHybrid, dp):
+    global instance_object, data_instance
+    instance_object = instance
+    data_instance = dp
+
+    instance_type = data_instance['instance_type']
+
+    if instance_type == 'vrp':
+        time, path, routes, cost, coordinates, fitness_list = execute_vrp.execute_some_method(instance, method_selected, parameters)
+        prepare_results_vrp(1, method_selected, path, routes, coordinates, fitness_list)
+
+        if type_of_method == 'hybrid':
+            _, _, method_selected2, parameters = take_parameters_instance(2, args, path)
+            time2, path2, routes2, cost2, _, fitness_list = execute_vrp.execute_some_method(instance, method_selected2, parameters)
+            prepare_results_vrp(2, method_selected2, path2, routes2, coordinates, fitness_list)
+            return type_of_method, instance_type, instance, [method_selected, method_selected2], [time, time2], [cost, cost2]
+
+        return type_of_method, instance_type, instance, method_selected, time, cost
+
+    else:
+        time, path, cost, coordinates, fitness_list = execute_tsp.execute_some_method(instance, method_selected, parameters)
+        prepare_results_tsp(1, method_selected, path, coordinates, fitness_list)
+
+        if type_of_method == 'hybrid':
+            _, _, method_selected2, parameters = take_parameters_instance(2, args, path)
+            time2, path2, cost2, _, fitness_list = execute_tsp.execute_some_method(instance, method_selected2, parameters)
+            prepare_results_tsp(2, method_selected2, path2, coordinates, fitness_list)
+            return type_of_method, instance_type, instance, [method_selected, method_selected2], [time, time2], [cost, cost2]
+
+        return type_of_method, instance_type, instance, method_selected, time, cost
+"""
