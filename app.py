@@ -97,6 +97,19 @@ class Main():
         await conn.send(json.dumps(j))
         return {'data':'Finishing the execution', 'task':'functions_solver'}
 
+    @classmethod
+    async def instances_names(cls, conn):
+        data = {}
+        data['task'] = 'instances_names'
+        for folder in os.listdir('./CODE/INSTANCES/'):
+            data[folder] = os.listdir('./CODE/INSTANCES/'+folder)
+        return json.dumps(data)
+
+    @classmethod
+    async def instances_methods(cls, conn):
+        j = json.loads(open(os.path.dirname(__file__) + "./CODE/JSON/instances-methods.json", 'r').read())
+        j['task'] = 'instances_methods'
+        return j
+
 if __name__ == "__main__":
     Main().run()
-    
