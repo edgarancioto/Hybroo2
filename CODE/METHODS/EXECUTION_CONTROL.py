@@ -10,7 +10,7 @@ data_instance = None
 def execute_function(fo, isHybrid, dp):
     global function_object, data_function
     function_object = fo
-    data_post = dp
+    data_function = dp
     
     initial_time = time.time()
     result_first = prepare_parameters(1)
@@ -68,6 +68,7 @@ def execute_function(fo, isHybrid, dp):
 def prepare_parameters(order, hybrid_individual = None):
     results = []
     if order == 1:
+        print()
         for i in data_function['firstMethod']:
             if i['label'] == 'first-method':
                 if i['value'] == 'ga':
