@@ -1,5 +1,5 @@
 {
-    "ga-tsp":{
+    "tsp-ga":{
         "id":3,
         "name": "Genetic Algorithm",
         "approach": "HYBRID",
@@ -54,7 +54,7 @@
             }
         ]
     },
-    "ga-vrp":{
+    "vrp-ga":{
         "id":4,
         "name": "Genetic Algorithm",
         "approach": "HYBRID",
@@ -95,7 +95,7 @@
             }
         ]
     },
-    "sa":{
+    "tsp-sa":{
         "id":5,
         "name": "Simulated Annealing",
         "approach": "HYBRID",
@@ -131,7 +131,7 @@
             }
         ]
     },
-    "aco":{
+    "tsp-aco":{
         "id":6,
         "name": "Ants Colony Optimization",
         "approach": "SINGLE",

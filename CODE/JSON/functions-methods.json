@@ -3,6 +3,7 @@
         "id":1,
         "name": "Genetic Algorithm",
         "approach": "HYBRID",
+        "callable-method": "execute_ga",
         "description": "Is a metaheuristic inspired by the process of natural selection that belongs to the larger class of Evolutionary Algorithms (EA). Genetic algorithms are commonly used to generate high-quality solutions to optimization and search problems by relying on biologically inspired operators such as mutation, crossover and selection.", 
         "fields":[
             {
@@ -46,6 +47,7 @@
         "id":2,
         "name": "Simulated Annealing",
         "approach": "HYBRID",
+        "callable-method": "execute_sa",
         "description": "The simulated annealing algorithm is an optimization method which mimics the slow cooling of metals, which is characterized by a progressive reduction in the atomic movements that reduce the density of lattice defects until a lowest-energy state is reached.", 
         "fields":[
             {

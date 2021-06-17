@@ -92,7 +92,7 @@ class Main():
         
         await conn.send(json.dumps({'data':'Starts a new execution', 'task':'functions_solver'}))
         j = {}
-        j['data'] = await cls.loop.run_in_executor(None, EXECUTION_CONTROL.execute_function, function_obj, isHybrid, params)
+        j['data'] = await cls.loop.run_in_executor(None, EXECUTION_CONTROL.prepare_resolution_functions, function_obj, isHybrid, params)
         j['task'] = 'functions_solver_results'
         await conn.send(json.dumps(j))
         return {'data':'Finishing the execution', 'task':'functions_solver'}
@@ -116,11 +116,9 @@ class Main():
         params = params['collectionData']
         isHybrid = bool(params['isHybrid'])
         _, function_obj = cls.find_function_by_id(int(params['problem']))
-        if function_obj.multidimensional:
-            function_obj.set_n_dimension(int(params['dimension']))
         await conn.send(json.dumps({'data':'Starts a new execution', 'task':'functions_solver'}))
         j = {}
-        j['data'] = await cls.loop.run_in_executor(None, EXECUTION_CONTROL.execute_control, function_obj, isHybrid, params)
+        j['data'] = await cls.loop.run_in_executor(None, EXECUTION_CONTROL.execute_instances, function_obj, isHybrid, params)
         j['task'] = 'functions_solver_results'
         await conn.send(json.dumps(j))
         return {'data':'Finishing the execution', 'task':'functions_solver'}

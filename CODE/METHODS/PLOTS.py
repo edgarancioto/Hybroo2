@@ -99,3 +99,50 @@ class PLots():
         pic_hash = b64encode(pic_IObytes.read())
         plt.clf()
         return str(pic_hash)
+
+    def plot_tsp_path(coord, path, order, title=None):
+        plt.clf()
+        plt.figure(figsize=(6.4, 4.8))
+        x = []
+        y = []
+        x1 = []
+        x2 = []
+        for i in range(len(coord)):
+            x.append(coord[i][0])
+            y.append(coord[i][1])
+            x1.append(coord[path[i]][0])
+            x2.append(coord[path[i]][1])
+        x1.append(x1[0])
+        x2.append(x2[0])
+        plt.plot(x1, x2, 'co')
+        plt.plot(x1, x2)
+        plt.axis('off')
+        if title is not None:
+            plt.title(title)
+        save_fig("path" + str(order))
+
+    def plot_vrp_routs(routes, coord, path, order, title=None):
+        plt.clf()
+        plt.figure(figsize=(6.4, 4.8))
+        x = []
+        y = []
+        starts = 0
+        for i in routes:
+            for j in range(starts, (starts + i)):
+                x.append(coord[path[j]][0])
+                y.append(coord[path[j]][1])
+                plt.text(x[-1], y[-1], str(path[j]))
+            starts += i
+        starts = 0
+        for i in range(len(routes)):
+            x1 = [coord[0][0]] + x[starts:starts + routes[i]] + [coord[0][0]]
+            y1 = [coord[0][1]] + y[starts:starts + routes[i]] + [coord[0][1]]
+            plt.plot(x1, y1)
+            starts += routes[i]
+        x.append(coord[0][0])
+        y.append(coord[0][1])
+        plt.plot(x, y, 'co')
+        plt.axis('off')
+        if title is not None:
+            plt.suptitle(title)
+        save_fig("route" + str(order))
