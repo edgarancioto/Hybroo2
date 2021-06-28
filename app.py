@@ -1,4 +1,4 @@
-from CODE.OBJECTS import FUNCTION, INSTANCE
+from CODE.OBJECTS import FUNCTION
 from CODE.METHODS import EXECUTION_CONTROL
 from sympy import latex
 import os
@@ -124,5 +124,49 @@ class Main():
         return {'data':'Finishing the execution', 'task':'functions_solver'}
 
 
+
 if __name__ == "__main__":
     Main().run()
+    """
+    data = {'collectionData': {
+        "problem":"2", "dimension":"2",
+        "isHybrid":False,
+        "firstMethod":{
+        "name-method":"ga",
+        "Population":"50",
+        "Generation":"3",
+        "Crossover":"0.8",
+        "Mutation":"0.05",
+        "Elitism":"0.15"},
+        "secondMethod":{
+        "name-method":"0"}}}
+
+    params = data['collectionData']
+    isHybrid = bool(params['isHybrid'])
+    _, function_obj = Main().find_function_by_id(int(params['problem']))
+
+    j = {}
+    #j['data'] = EXECUTION_CONTROL.prepare_resolution_functions(function_obj, isHybrid, params)
+    print(j)
+
+    data = {'collectionData': {
+        "problem":"pr144.tsp",
+        "isHybrid":False,
+        "firstMethod":{
+        "name-method":"tsp-ga",
+        "Population":"50",
+        "Generation":"1000",
+        "Crossover":"0.8",
+        "Simple":"0.04",
+        "Inverse":"0.08",
+        "Elitism":"0.15",
+        "Special":"checked"},
+        "secondMethod":{
+        "second-method":"0"}}}
+
+    params = data['collectionData']
+    isHybrid = bool(params['isHybrid'])
+
+    j = {}
+    j['data'] = EXECUTION_CONTROL.prepare_resolution_instances(isHybrid, params)
+    print(j)"""

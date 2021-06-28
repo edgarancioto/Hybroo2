@@ -3,6 +3,8 @@
         "id":3,
         "name": "Genetic Algorithm",
         "approach": "HYBRID",
+        "problem-type":"TSP",
+        "callable-method": "execute_tsp_ga",
         "description": "Is a metaheuristic inspired by the process of natural selection that belongs to the larger class of Evolutionary Algorithms (EA). Genetic algorithms are commonly used to generate high-quality solutions to optimization and search problems by relying on biologically inspired operators such as mutation, crossover and selection.", 
         "fields":[
             {
@@ -58,6 +60,8 @@
         "id":4,
         "name": "Genetic Algorithm",
         "approach": "HYBRID",
+        "problem-type":"VRP",
+        "callable-method": "execute_vrp_ga",
         "description": "Is a metaheuristic inspired by the process of natural selection that belongs to the larger class of Evolutionary Algorithms (EA). Genetic algorithms are commonly used to generate high-quality solutions to optimization and search problems by relying on biologically inspired operators such as mutation, crossover and selection.", 
         "fields":[
             {
@@ -99,6 +103,8 @@
         "id":5,
         "name": "Simulated Annealing",
         "approach": "HYBRID",
+        "problem-type":"TSP",
+        "callable-method": "execute_tsp_sa",
         "description": "Is an optimization method which mimics the slow cooling of metals, which is characterized by a progressive reduction in the atomic movements that reduce the density of lattice defects until a lowest-energy state is reached.", 
         "fields":[
             {
@@ -135,6 +141,8 @@
         "id":6,
         "name": "Ants Colony Optimization",
         "approach": "SINGLE",
+        "problem-type":"TSP",
+        "callable-method": "execute_tsp_aco",
         "description": "Is a population-based metaheuristic that can be used to find approximate solutions to difficult optimization problems. In ACO, a set of software agents called artificial ants search for good solutions to a given optimization problem.", 
         "fields":[
             {

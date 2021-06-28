@@ -26,10 +26,10 @@ class Instance(object):
         return """Name: %s \nType : %s \nComment: %s \nNodes: %s \nDimension: %s \nCapacity: %s \nEdge weight: %s \nNode demand: %s \nNode coordinate type: %s \n""" % \
                (self.name, self.type, self.comment, self.node_coord, self.dimension, self.capacity, self.node_distances, self.node_demand, self.ewt)
 
-    def load_instance(self, name):
+    def load_instance(self, path, name):
         self.__init__()
         self.name = name
-        with open(os.path.dirname(__file__) + "/INSTANCES/CVRP/" + self.name) as f:
+        with open(str(os.path.dirname(__file__)) + "/../INSTANCES/"+ str(path +"/"+ self.name), 'r') as f:
             while True:
                 line = f.readline()
                 (var, _, val) = line.partition(":")
