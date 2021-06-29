@@ -60,8 +60,8 @@
         "id":4,
         "name": "Genetic Algorithm",
         "approach": "HYBRID",
-        "problem-type":"VRP",
-        "callable-method": "execute_vrp_ga",
+        "problem-type":"CVRP",
+        "callable-method": "execute_cvrp_ga",
         "description": "Is a metaheuristic inspired by the process of natural selection that belongs to the larger class of Evolutionary Algorithms (EA). Genetic algorithms are commonly used to generate high-quality solutions to optimization and search problems by relying on biologically inspired operators such as mutation, crossover and selection.", 
         "fields":[
             {

@@ -42,7 +42,7 @@ class GA(object):
             self.fitness_list.append(self.chromosome_list[0].get_distance())
             self.elite_survivors()
             self.restore_population()
-        return self.generation_results[-1].genes_order, self.generation_results[-1].routes_vector, self.generation_results[-1].get_distance(), self.fitness_list
+        return self.generation_results[-1].genes_order, self.generation_results[-1].get_distance(), self.fitness_list, self.generation_results[-1].routes_vector
 
     def population_create(self):
         for i in range(self.population_size):

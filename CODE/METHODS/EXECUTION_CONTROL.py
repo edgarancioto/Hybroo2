@@ -29,32 +29,38 @@ def prepare_resolution_instances(isHybrid, dp):
     result_first_done = {'nodes-best': str(result_first[0]), 'value-best': str(result_first[1]), 'time': str(time.time() - initial_time)}
     
     PLOTS = PLots()
+    route_plot = PLOTS.plot_route(type_problem, instance_object.node_coord, result_first[0], result_first[3])
 
     if not isHybrid:
-        err1 = PLOTS.plot_err(result_first[1])
+        err1 = PLOTS.plot_err(result_first[2])
+        
         return {
             'problem':instance_object.name,
             'problem-description':str(instance_object),
             'isHybrid':isHybrid,
             'result-first':result_first_done,
-            'err1':err1
+            'err1':err1,
+            'route-path':route_plot
         }
 
     initial_time = time.time()
     result_second = globals()[callable_method](data_instance['firstMethod'], result_first[0])
     result_second_done = {'nodes-best': str(result_first[0]), 'value-best': str(result_first[1]), 'time': str(time.time() - initial_time)}
         
-    err1, err2, err3 = PLOTS.plot_err(result_first[1], result_second[1])
-    
+    err1, err2, err3 = PLOTS.plot_err(result_first[2], result_second[2])
+    route_plot_2 = PLOTS.plot_route(type_problem, instance_object.node_coord, result_second[0], result_second[3])
+
     return {
-        'problem':function_object.name,
-        'problem-description':str(function_object),
+        'problem':instance_object.name,
+        'problem-description':str(instance_object),
         'isHybrid':isHybrid,
         'result-first':result_first_done,
         'result-second':result_second_done,
         'err1':err1,
         'err2':err2,
         'err3':err3,
+        'route-path-1':route_plot,
+        'route-path-2':route_plot_2,
         'hibridization-analysis':str('The FIRST hit the value SOMEVALUE in TIME seconds.\nStarting on the best found value, the SECOND *CONDITION got a improve DIFFERENCE in the solution, in TIME seconds. Hybridization reached a value of FINAL-VALUE in a total of FINAL-TIME seconds, considered a effective result, because one method support the other.')
     }
 
@@ -78,6 +84,16 @@ def execute_tsp_ga(params, hybrid_individual = None):
     parameters[6] =  bool(params['Special'] == "checked")
     parameters.append(hybrid_individual)
     return TSP_GA.GA(parameters).solve(instance_object)
+
+def execute_cvrp_ga(params, hybrid_individual = None):
+    parameters = [None] * 5
+    parameters[0] =  int(params['Population'])
+    parameters[1] =  int(params['Generation'])
+    parameters[2] =  int(float(params['Elitism']) * parameters[0])
+    parameters[3] =  float(params['Inverse'])
+    parameters[4] =  bool(params['Special'] == "checked")
+    parameters.append(hybrid_individual)
+    return CVRP_GA.GA(parameters).solve(instance_object)
 
 def prepare_resolution_functions(fo, isHybrid, dp):
     global function_object, data_function

@@ -207,34 +207,6 @@ def prepare_results_function_simulation(times, values, method_selected_1, method
 
 # ---------------methods of control operations of instances---------------
 
-def controller_call_method_instance(args):
-    type_of_method = args['type_of_method']
-    type_of_problem, instance, method_selected, parameters = take_parameters_instance(1, args)
-
-    if type_of_problem == 'vrp':
-        time, path, routes, cost, coordinates, fitness_list = execute_vrp.execute_some_method(instance, method_selected, parameters)
-        prepare_results_vrp(1, method_selected, path, routes, coordinates, fitness_list)
-
-        if type_of_method == 'hybrid':
-            _, _, method_selected2, parameters = take_parameters_instance(2, args, path)
-            time2, path2, routes2, cost2, _, fitness_list = execute_vrp.execute_some_method(instance, method_selected2, parameters)
-            prepare_results_vrp(2, method_selected2, path2, routes2, coordinates, fitness_list)
-            return type_of_method, type_of_problem, instance, [method_selected, method_selected2], [time, time2], [cost, cost2]
-
-        return type_of_method, type_of_problem, instance, method_selected, time, cost
-
-    else:
-        time, path, cost, coordinates, fitness_list = execute_tsp.execute_some_method(instance, method_selected, parameters)
-        prepare_results_tsp(1, method_selected, path, coordinates, fitness_list)
-
-        if type_of_method == 'hybrid':
-            _, _, method_selected2, parameters = take_parameters_instance(2, args, path)
-            time2, path2, cost2, _, fitness_list = execute_tsp.execute_some_method(instance, method_selected2, parameters)
-            prepare_results_tsp(2, method_selected2, path2, coordinates, fitness_list)
-            return type_of_method, type_of_problem, instance, [method_selected, method_selected2], [time, time2], [cost, cost2]
-
-        return type_of_method, type_of_problem, instance, method_selected, time, cost
-
 
 def controller_simulate_method(args, simulation_times):
     times, costs = [], []
@@ -460,61 +432,3 @@ def plot_vrp_routs(routes, coord, path, order, title=None):
     if title is not None:
         plt.suptitle(title)
     save_fig("route" + str(order))
-
-
-def take_parameters_instance(order, args, hybrid_parameter=None):
-    type_of_problem = args['type_of_problem']
-    if type_of_problem == 'vrp':
-        instance = args['instance_selected_vrp']
-    else:
-        instance = args['instance_selected_tsp']
-
-    if order == 1:
-        method_selected = args['method_selected_1']
-    else:
-        method_selected = args['method_selected_2']
-
-    parameters = []
-    if method_selected == 'Ant Colony Optimization':
-        parameters.append(int(args['ants_aco']))
-        parameters.append(int(args['generation_aco']))
-        parameters.append(float(args['alpha_aco']))
-        parameters.append(int(args['beta_aco']))
-        parameters.append(float(args['rho_aco']))
-        parameters.append(int(args['q_aco']))
-    elif method_selected == 'Simulated Annealing':
-        parameters.append(int(args['t_sa']))
-        parameters.append(float(args['alpha_sa']))
-        parameters.append(float(args['tolerance_sa']))
-        parameters.append(int(args['iter_sa']))
-        if hybrid_parameter is not None:
-            parameters.append(hybrid_parameter)
-        else:
-            parameters.append(None)
-    elif method_selected == 'Genetic Algorithm':
-        if type_of_problem == 'vrp':
-            parameters.append(int(args['population_ga_vrp']))
-            parameters.append(int(args['generation_ga_vrp']))
-            parameters.append(int(float(args['elitism_ga_vrp'])*int(args['population_ga_vrp'])))
-            parameters.append(float(args['inverse_mutation_ga_vrp']))
-            try:
-                parameters.append(args['special_individual_ga_vrp'] is not None)
-            except KeyError:
-                parameters.append(False)
-        else:
-            parameters.append(int(args['population_ga_tsp']))
-            parameters.append(int(args['generation_ga_tsp']))
-            parameters.append(int(float(args['elitism_ga_tsp']) * int(args['population_ga_tsp'])))
-            parameters.append(float(args['crossover_ga_tsp']))
-            parameters.append(float(args['simple_mutation_ga_tsp']))
-            parameters.append(float(args['inverse_mutation_ga_tsp']))
-
-            try:
-                parameters.append(args['special_individual_ga_tsp'] is not None)
-            except KeyError:
-                parameters.append(False)
-        if hybrid_parameter is not None:
-            parameters.append(hybrid_parameter)
-        else:
-            parameters.append(None)
-    return type_of_problem, instance, method_selected, parameters

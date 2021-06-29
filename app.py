@@ -115,20 +115,17 @@ class Main():
     async def instances_solver(cls, conn, params):
         params = params['collectionData']
         isHybrid = bool(params['isHybrid'])
-        _, function_obj = cls.find_function_by_id(int(params['problem']))
-        await conn.send(json.dumps({'data':'Starts a new execution', 'task':'functions_solver'}))
+        await conn.send(json.dumps({'data':'Starts a new execution', 'task':'instances_solver'}))
         j = {}
-        j['data'] = await cls.loop.run_in_executor(None, EXECUTION_CONTROL.execute_instances, function_obj, isHybrid, params)
-        j['task'] = 'functions_solver_results'
+        j['data'] = await cls.loop.run_in_executor(None, EXECUTION_CONTROL.prepare_resolution_instances, isHybrid, params)
+        j['task'] = 'instances_solver_results'
         await conn.send(json.dumps(j))
-        return {'data':'Finishing the execution', 'task':'functions_solver'}
-
+        return {'data':'Finishing the execution', 'task':'instances_solver'}
 
 
 if __name__ == "__main__":
     Main().run()
-    """
-    data = {'collectionData': {
+    """data = {'collectionData': {
         "problem":"2", "dimension":"2",
         "isHybrid":False,
         "firstMethod":{
@@ -150,23 +147,32 @@ if __name__ == "__main__":
     print(j)
 
     data = {'collectionData': {
-        "problem":"pr144.tsp",
-        "isHybrid":False,
+        "problem":"A-n32-k5.vrp",
+        "isHybrid":True,
         "firstMethod":{
-        "name-method":"tsp-ga",
-        "Population":"50",
-        "Generation":"1000",
-        "Crossover":"0.8",
-        "Simple":"0.04",
-        "Inverse":"0.08",
-        "Elitism":"0.15",
-        "Special":"checked"},
+            "name-method":"vrp-ga",
+            "Population":"50",
+            "Generation":"3",
+            #"Crossover":"0.8",
+            #"Simple":"0.04",
+            "Inverse":"0.08",
+            "Elitism":"0.15",
+            "Special":"checked"
+        },
         "secondMethod":{
-        "second-method":"0"}}}
+            "name-method":"vrp-ga",
+            "Population":"50",
+            "Generation":"3",
+            #"Crossover":"0.8",
+            #"Simple":"0.04",
+            "Inverse":"0.08",
+            "Elitism":"0.15",
+            "Special":"checked"
+        }}}
 
     params = data['collectionData']
     isHybrid = bool(params['isHybrid'])
 
     j = {}
     j['data'] = EXECUTION_CONTROL.prepare_resolution_instances(isHybrid, params)
-    print(j)"""
+    #print(j)"""

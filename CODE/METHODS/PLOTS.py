@@ -89,6 +89,7 @@ class PLots():
         plt.savefig(pic_IObytes,  format='png')
         pic_IObytes.seek(0)
         pic_hash = b64encode(pic_IObytes.read())
+        # plt.show()
         plt.clf()
         return str(pic_hash)
 
@@ -100,49 +101,51 @@ class PLots():
         plt.clf()
         return str(pic_hash)
 
-    def plot_tsp_path(coord, path, order, title=None):
-        plt.clf()
+    def plot_route(cls, type_problem, coordinates, path, routes=None):
+        if type_problem == 'TSP':
+            return cls.plot_tsp_path(coordinates, path)
+        else:
+            return cls.plot_vrp_path(coordinates, path, routes)
+
+    def plot_tsp_path(cls, coordinates, path):
         plt.figure(figsize=(6.4, 4.8))
+        plt.grid(True)
         x = []
         y = []
         x1 = []
         x2 = []
-        for i in range(len(coord)):
-            x.append(coord[i][0])
-            y.append(coord[i][1])
-            x1.append(coord[path[i]][0])
-            x2.append(coord[path[i]][1])
+        for i in range(len(coordinates)):
+            x.append(coordinates[i][0])
+            y.append(coordinates[i][1])
+            x1.append(coordinates[path[i]][0])
+            x2.append(coordinates[path[i]][1])
         x1.append(x1[0])
         x2.append(x2[0])
         plt.plot(x1, x2, 'co')
         plt.plot(x1, x2)
         plt.axis('off')
-        if title is not None:
-            plt.title(title)
-        save_fig("path" + str(order))
+        return cls.convert_fig_mat()
 
-    def plot_vrp_routs(routes, coord, path, order, title=None):
-        plt.clf()
+    def plot_vrp_path(cls, coordinates, path, routes):
         plt.figure(figsize=(6.4, 4.8))
+        plt.grid(True)
         x = []
         y = []
         starts = 0
         for i in routes:
             for j in range(starts, (starts + i)):
-                x.append(coord[path[j]][0])
-                y.append(coord[path[j]][1])
+                x.append(coordinates[path[j]][0])
+                y.append(coordinates[path[j]][1])
                 plt.text(x[-1], y[-1], str(path[j]))
             starts += i
         starts = 0
         for i in range(len(routes)):
-            x1 = [coord[0][0]] + x[starts:starts + routes[i]] + [coord[0][0]]
-            y1 = [coord[0][1]] + y[starts:starts + routes[i]] + [coord[0][1]]
+            x1 = [coordinates[0][0]] + x[starts:starts + routes[i]] + [coordinates[0][0]]
+            y1 = [coordinates[0][1]] + y[starts:starts + routes[i]] + [coordinates[0][1]]
             plt.plot(x1, y1)
             starts += routes[i]
-        x.append(coord[0][0])
-        y.append(coord[0][1])
+        x.append(coordinates[0][0])
+        y.append(coordinates[0][1])
         plt.plot(x, y, 'co')
         plt.axis('off')
-        if title is not None:
-            plt.suptitle(title)
-        save_fig("route" + str(order))
+        return cls.convert_fig_mat()
