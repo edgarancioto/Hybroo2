@@ -29,7 +29,7 @@ def solve_instances(dp):
     
     initial_time = time.time()
     result_first = globals()[callable_method](data_instance['firstMethod'], None)
-    result_first_done = {'nodes-best': str(result_first[0]), 'value-best': str(result_first[1]), 'time': str(time.time() - initial_time)}
+    result_first_done = {'value-best': str(result_first[1]), 'time': str(time.time() - initial_time)}
     
     PLOTS = PLots()
     route_plot = PLOTS.plot_route(type_problem, instance_object.node_coord, result_first)
@@ -42,13 +42,12 @@ def solve_instances(dp):
             'problem-description':str(instance_object),
             'isHybrid':isHybrid,
             'result-first':result_first_done,
-            'err1':err1,
-            'route-path':route_plot
+            'images':[err1, route_plot, err1, route_plot]
         }
 
     initial_time = time.time()
     result_second = globals()[callable_method](data_instance['firstMethod'], result_first[0])
-    result_second_done = {'nodes-best': str(result_first[0]), 'value-best': str(result_first[1]), 'time': str(time.time() - initial_time)}
+    result_second_done = {'value-best': str(result_first[1]), 'time': str(time.time() - initial_time)}
         
     err1, err2, err3 = PLOTS.plot_err(result_first[2], result_second[2])
     route_plot_2 = PLOTS.plot_route(type_problem, instance_object.node_coord, result_second)
@@ -59,11 +58,7 @@ def solve_instances(dp):
         'isHybrid':isHybrid,
         'result-first':result_first_done,
         'result-second':result_second_done,
-        'err1':err1,
-        'err2':err2,
-        'err3':err3,
-        'route-path-1':route_plot,
-        'route-path-2':route_plot_2,
+        'images':[err1, err2, err3, route_plot, route_plot_2, err1, route_plot],
         'hibridization-analysis':str('The FIRST hit the value SOMEVALUE in TIME seconds.\nStarting on the best found value, the SECOND *CONDITION got a improve DIFFERENCE in the solution, in TIME seconds. Hybridization reached a value of FINAL-VALUE in a total of FINAL-TIME seconds, considered a effective result, because one method support the other.')
     }
 
