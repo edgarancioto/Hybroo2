@@ -1,6 +1,3 @@
-from BackEnd.InstanceProblem.CVRP import execute_vrp
-from BackEnd.InstanceProblem.TSP import execute_tsp
-from BackEnd.FunctionProblem import execute_function
 from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
 from matplotlib import cm
@@ -280,7 +277,6 @@ def controller_repetition_method(args, simulation_times):
         file_name += "-" + str(instance)
         save_repetition(file_name, times[-1], fitness_values[-1])
 
-
 def save_repetition(file_name, time, fitness_list):
     file = os.path.dirname(__file__) + "/TestFiles/" + file_name + ".txt"
     try:
@@ -297,7 +293,6 @@ def save_repetition(file_name, time, fitness_list):
     arq_w.write(text)
     arq_w.close()
     print("log: file saved")
-
 
 def update_bests(type_of_problem, cost, time, path, coord, routes=None):
     global best_cost, best_time, best_path, best_coord, best_routes, second_cost, second_time, second_path, second_routes, second_coord
@@ -322,7 +317,6 @@ def update_bests(type_of_problem, cost, time, path, coord, routes=None):
             if type_of_problem == 'vrp':
                 second_routes = routes
 
-
 def update_simulation_progress(count, simulation_times, times, costs):
     try:
         arq_w = open(os.getcwd() + "/FrontEnd/static/files/simulation-status.txt", "w")
@@ -343,7 +337,6 @@ def update_simulation_progress(count, simulation_times, times, costs):
         text += "\nTime Left: " + str((simulation_times - (count + 1)) * avg)
     arq_w.write(text)
     arq_w.close()
-
 
 def prepare_results_simulation(type_of_problem, times, costs):
     plt.boxplot(times, labels=['Time(s)'])
@@ -373,62 +366,3 @@ def prepare_results_simulation(type_of_problem, times, costs):
     else:
         plot_tsp_path(best_coord, best_path, '-best', title_1)
         plot_tsp_path(second_coord, second_path, '-second', title_2)
-
-
-def prepare_results_tsp(order, method, path, coord, fitness_list):
-    plot_tsp_path(coord, path, order)
-    plot_err(fitness_list, order, method)
-
-
-def prepare_results_vrp(order, method, path, routes, coord, fitness_list):
-    plot_vrp_routs(routes, coord, path, order)
-    plot_err(fitness_list, order, method)
-
-
-def plot_tsp_path(coord, path, order, title=None):
-    plt.clf()
-    plt.figure(figsize=(6.4, 4.8))
-    x = []
-    y = []
-    x1 = []
-    x2 = []
-    for i in range(len(coord)):
-        x.append(coord[i][0])
-        y.append(coord[i][1])
-        x1.append(coord[path[i]][0])
-        x2.append(coord[path[i]][1])
-    x1.append(x1[0])
-    x2.append(x2[0])
-    plt.plot(x1, x2, 'co')
-    plt.plot(x1, x2)
-    plt.axis('off')
-    if title is not None:
-        plt.title(title)
-    save_fig("path" + str(order))
-
-
-def plot_vrp_routs(routes, coord, path, order, title=None):
-    plt.clf()
-    plt.figure(figsize=(6.4, 4.8))
-    x = []
-    y = []
-    starts = 0
-    for i in routes:
-        for j in range(starts, (starts + i)):
-            x.append(coord[path[j]][0])
-            y.append(coord[path[j]][1])
-            plt.text(x[-1], y[-1], str(path[j]))
-        starts += i
-    starts = 0
-    for i in range(len(routes)):
-        x1 = [coord[0][0]] + x[starts:starts + routes[i]] + [coord[0][0]]
-        y1 = [coord[0][1]] + y[starts:starts + routes[i]] + [coord[0][1]]
-        plt.plot(x1, y1)
-        starts += routes[i]
-    x.append(coord[0][0])
-    y.append(coord[0][1])
-    plt.plot(x, y, 'co')
-    plt.axis('off')
-    if title is not None:
-        plt.suptitle(title)
-    save_fig("route" + str(order))

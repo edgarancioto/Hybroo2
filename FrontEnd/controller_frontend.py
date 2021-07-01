@@ -230,14 +230,12 @@ class AppReload(object):
         app = self.get_application()
         return app(environ, start_response)
 
-
 def start_system_local():
     #application = AppReload(get_app)
 
     #run_simple('127.0.0.1', 5000, application, use_reloader=True, use_debugger=True, use_evalex=True, threaded=True)
     port = int(os.environ.get("PORT", 5000))
     get_app().run(host="0.0.0.0", port=port)
-
 
 def start_system_server(ip):
     application = AppReload(get_app)

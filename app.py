@@ -92,7 +92,7 @@ class Main():
         
         await conn.send(json.dumps({'data':'Starts a new execution', 'task':'functions_solver'}))
         j = {}
-        j['data'] = await cls.loop.run_in_executor(None, EXECUTION_CONTROL.prepare_resolution_functions, function_obj, isHybrid, params)
+        j['data'] = await cls.loop.run_in_executor(None, EXECUTION_CONTROL.solve_functions, function_obj, isHybrid, params)
         j['task'] = 'functions_solver_results'
         await conn.send(json.dumps(j))
         return {'data':'Finishing the execution', 'task':'functions_solver'}
@@ -113,19 +113,17 @@ class Main():
 
     @classmethod
     async def instances_solver(cls, conn, params):
-        params = params['collectionData']
-        isHybrid = bool(params['isHybrid'])
-        await conn.send(json.dumps({'data':'Starts a new execution', 'task':'instances_solver'}))
         j = {}
-        j['data'] = await cls.loop.run_in_executor(None, EXECUTION_CONTROL.prepare_resolution_instances, isHybrid, params)
         j['task'] = 'instances_solver_results'
+        await conn.send(json.dumps({'data':'Starts a new execution', 'task':'instances_solver'}))
+        j['data'] = await cls.loop.run_in_executor(None, EXECUTION_CONTROL.solve_instances, params['collectionData'])
         await conn.send(json.dumps(j))
         return {'data':'Finishing the execution', 'task':'instances_solver'}
 
 
 if __name__ == "__main__":
-    Main().run()
-    """data = {'collectionData': {
+    #Main().run()
+    data = {'collectionData': {
         "problem":"2", "dimension":"2",
         "isHybrid":False,
         "firstMethod":{
@@ -138,12 +136,8 @@ if __name__ == "__main__":
         "secondMethod":{
         "name-method":"0"}}}
 
-    params = data['collectionData']
-    isHybrid = bool(params['isHybrid'])
-    _, function_obj = Main().find_function_by_id(int(params['problem']))
-
     j = {}
-    #j['data'] = EXECUTION_CONTROL.prepare_resolution_functions(function_obj, isHybrid, params)
+    j['data'] = EXECUTION_CONTROL.solve_functions(data['collectionData'])
     print(j)
 
     data = {'collectionData': {
@@ -170,9 +164,6 @@ if __name__ == "__main__":
             "Special":"checked"
         }}}
 
-    params = data['collectionData']
-    isHybrid = bool(params['isHybrid'])
-
     j = {}
-    j['data'] = EXECUTION_CONTROL.prepare_resolution_instances(isHybrid, params)
-    #print(j)"""
+    j['data'] = EXECUTION_CONTROL.solve_instances(data['collectionData'])
+    print(j)
