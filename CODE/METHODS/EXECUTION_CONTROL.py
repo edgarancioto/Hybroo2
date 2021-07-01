@@ -129,6 +129,7 @@ def solve_functions(dp):
     global function_object, data_function
     data_function = dp
     _, function_object = Main.find_function_by_id(int(data_function['problem']))
+    function_object.set_n_dimension(int(data_function['dimension']))
     isHybrid = data_function['isHybrid']
 
     j = json.loads(open(os.path.dirname(__file__) + "/../JSON/functions-methods.json", 'r').read())
