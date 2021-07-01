@@ -122,8 +122,8 @@ class Main():
 
 
 if __name__ == "__main__":
-    #Main().run()
-    data = {'collectionData': {
+    Main().run()
+    """data = {'collectionData': {
         "problem":"2", "dimension":"2",
         "isHybrid":False,
         "firstMethod":{
@@ -166,4 +166,4 @@ if __name__ == "__main__":
 
     j = {}
     j['data'] = EXECUTION_CONTROL.solve_instances(data['collectionData'])
-    print(j)
+    print(j)"""
