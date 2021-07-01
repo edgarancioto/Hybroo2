@@ -32,7 +32,7 @@ def solve_instances(dp):
     result_first_done = {'nodes-best': str(result_first[0]), 'value-best': str(result_first[1]), 'time': str(time.time() - initial_time)}
     
     PLOTS = PLots()
-    route_plot = PLOTS.plot_route(type_problem, instance_object.node_coord, result_first[0], result_first[3])
+    route_plot = PLOTS.plot_route(type_problem, instance_object.node_coord, result_first)
 
     if not isHybrid:
         err1 = PLOTS.plot_err(result_first[2])
@@ -51,7 +51,7 @@ def solve_instances(dp):
     result_second_done = {'nodes-best': str(result_first[0]), 'value-best': str(result_first[1]), 'time': str(time.time() - initial_time)}
         
     err1, err2, err3 = PLOTS.plot_err(result_first[2], result_second[2])
-    route_plot_2 = PLOTS.plot_route(type_problem, instance_object.node_coord, result_second[0], result_second[3])
+    route_plot_2 = PLOTS.plot_route(type_problem, instance_object.node_coord, result_second)
 
     return {
         'problem':instance_object.name,

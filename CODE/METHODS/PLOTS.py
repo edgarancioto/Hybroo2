@@ -101,11 +101,11 @@ class PLots():
         plt.clf()
         return str(pic_hash)
 
-    def plot_route(cls, type_problem, coordinates, path, routes=None):
+    def plot_route(cls, type_problem, coordinates, params):
         if type_problem == 'TSP':
-            return cls.plot_tsp_path(coordinates, path)
+            return cls.plot_tsp_path(coordinates, params[0])
         else:
-            return cls.plot_vrp_path(coordinates, path, routes)
+            return cls.plot_vrp_path(coordinates, params[0], params[3])
 
     def plot_tsp_path(cls, coordinates, path):
         plt.figure(figsize=(6.4, 4.8))
