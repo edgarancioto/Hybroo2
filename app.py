@@ -85,12 +85,22 @@ class Main():
 
     @classmethod
     async def functions_solver(cls, conn, params):
-        await conn.send(json.dumps({'data':'Starts a new execution', 'task':'functions_solver'}))
+        simulation = params['collectionData']['simulation']
+        if simulation == 0:
+            await conn.send(json.dumps({'data':'Starts a single execution', 'task':'functions_solver'}))
+            j = {}
+            j['data'] = await cls.loop.run_in_executor(None, EXECUTION_CONTROL.solve_functions, params['collectionData'])
+            j['task'] = 'functions_solver_results'
+            await conn.send(json.dumps(j))
+            return {'data':'Finishing the execution', 'task':'functions_solver'}
+        
+        await conn.send(json.dumps({'data':'Starts a new Simulation', 'task':'simule_functions'}))
         j = {}
-        j['data'] = await cls.loop.run_in_executor(None, EXECUTION_CONTROL.solve_functions, params['collectionData'])
-        j['task'] = 'functions_solver_results'
+        j['data'] = await cls.loop.run_in_executor(None, EXECUTION_CONTROL.simule_functions, params['collectionData'], simulation)
+        j['task'] = 'simule_functions_results'
         await conn.send(json.dumps(j))
-        return {'data':'Finishing the execution', 'task':'functions_solver'}
+        return {'data':'Finishing the execution', 'task':'simule_functions'}
+
 
     @classmethod
     async def instances_names(cls, conn):
@@ -132,9 +142,10 @@ if __name__ == "__main__":
         "name-method":"0"}}}
 
     j = {}
-    j['data'] = EXECUTION_CONTROL.solve_functions(data['collectionData'])
+    j['data'] = EXECUTION_CONTROL.simule_functions(data['collectionData'], 10)
     print(j)
-
+    """
+    """
     data = {'collectionData': {
         "problem":"A-n32-k5.vrp",
         "isHybrid":True,
@@ -161,4 +172,6 @@ if __name__ == "__main__":
 
     j = {}
     j['data'] = EXECUTION_CONTROL.solve_instances(data['collectionData'])
-    print(j)"""
+    print(j)
+    """
+    

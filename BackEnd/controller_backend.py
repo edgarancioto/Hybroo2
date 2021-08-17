@@ -337,32 +337,3 @@ def update_simulation_progress(count, simulation_times, times, costs):
         text += "\nTime Left: " + str((simulation_times - (count + 1)) * avg)
     arq_w.write(text)
     arq_w.close()
-
-def prepare_results_simulation(type_of_problem, times, costs):
-    plt.boxplot(times, labels=['Time(s)'])
-    plt.gca().yaxis.grid(True)
-    save_fig("times-boxplot")
-
-    plt.boxplot(costs, labels=['Cost'])
-    plt.annotate('%.2f' % min(costs), (1, min(costs)), xytext=(40, 0), textcoords='offset points', bbox=dict(boxstyle="round", fc="0.8"),
-                 arrowprops=dict(arrowstyle="->", connectionstyle="angle,angleA=90,angleB=0,rad=10"))
-    plt.gca().yaxis.grid(True)
-    save_fig("costs-boxplot")
-
-    plt.figure(figsize=(6.4, 5.4))
-    plt.scatter(times, costs)
-    plt.xlabel('Time(s)')
-    plt.ylabel('Cost')
-    save_fig("scatter")
-
-    global best_cost, best_time, best_path, best_coord, best_routes, second_cost, second_time, second_path, second_routes, second_coord
-
-    title_1 = 'Solved in: '+str(round(best_time, 2))+'(s) with the cost: '+str(round(best_cost, 2))
-    title_2 = 'Solved in: ' + str(round(second_time, 2)) + '(s) with the cost: ' + str(round(second_cost, 2))
-
-    if type_of_problem == 'vrp':
-        plot_vrp_routs(best_routes, best_coord, best_path, '-best', title_1)
-        plot_vrp_routs(second_routes, second_coord, second_path, '-second', title_2)
-    else:
-        plot_tsp_path(best_coord, best_path, '-best', title_1)
-        plot_tsp_path(second_coord, second_path, '-second', title_2)

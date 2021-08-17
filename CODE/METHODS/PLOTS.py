@@ -84,23 +84,6 @@ class PLots():
         err3 = cls.convert_fig_mat()
         return [err1, err2, err3]
 
-    def convert_fig_mat(cls):
-        pic_IObytes = io.BytesIO()
-        plt.savefig(pic_IObytes,  format='png')
-        pic_IObytes.seek(0)
-        pic_hash = b64encode(pic_IObytes.read())
-        # plt.show()
-        plt.clf()
-        return str(pic_hash)
-
-    def convert_fig_sympy(cls, plot_3d):
-        pic_IObytes = io.BytesIO()
-        plot_3d.save(pic_IObytes)
-        pic_IObytes.seek(0)
-        pic_hash = b64encode(pic_IObytes.read())
-        plt.clf()
-        return str(pic_hash)
-
     def plot_route(cls, type_problem, coordinates, params):
         if type_problem == 'TSP':
             return cls.plot_tsp_path(coordinates, params[0])
@@ -149,3 +132,40 @@ class PLots():
         plt.plot(x, y, 'co')
         plt.axis('off')
         return cls.convert_fig_mat()
+
+    def plot_simulation(cls, times, costs):
+        plt.boxplot(times, labels=['Time(s)'])
+        plt.annotate('%.2f' % min(times), (1, min(times)), xytext=(40, 0), textcoords='offset points', bbox=dict(boxstyle="round", fc="0.8"),
+                    arrowprops=dict(arrowstyle="->", connectionstyle="angle,angleA=90,angleB=0,rad=10"))
+        plt.gca().yaxis.grid(True)
+        box_times = cls.convert_fig_mat()
+
+        plt.boxplot(costs, labels=['Cost'])
+        plt.annotate('%.2f' % min(costs), (1, min(costs)), xytext=(40, 0), textcoords='offset points', bbox=dict(boxstyle="round", fc="0.8"),
+                    arrowprops=dict(arrowstyle="->", connectionstyle="angle,angleA=90,angleB=0,rad=10"))
+        plt.gca().yaxis.grid(True)
+        box_costs = cls.convert_fig_mat()
+
+        plt.scatter(times, costs)
+        plt.xlabel('Time(s)')
+        plt.ylabel('Cost')
+        scatter = cls.convert_fig_mat()
+
+        return box_times, box_costs, scatter
+
+    def convert_fig_mat(cls):
+        pic_IObytes = io.BytesIO()
+        plt.savefig(pic_IObytes,  format='png')
+        pic_IObytes.seek(0)
+        pic_hash = b64encode(pic_IObytes.read())
+        # plt.show()
+        plt.clf()
+        return str(pic_hash)
+
+    def convert_fig_sympy(cls, plot_3d):
+        pic_IObytes = io.BytesIO()
+        plot_3d.save(pic_IObytes)
+        pic_IObytes.seek(0)
+        pic_hash = b64encode(pic_IObytes.read())
+        plt.clf()
+        return str(pic_hash)
