@@ -278,12 +278,12 @@ def simule_functions(dp, repetitions):
         'problem-description':str(function_object),
         'isHybrid':isHybrid,
         'times':vec_times,
-        'costs':vec_costs#,
-        #'3d':pl_3d,
-        #'contour':pl_contour,
-        #'box_times':box_times,
-        #'box_costs':box_costs,
-        #'scatter':scatter
+        'costs':vec_costs,
+        '3d':pl_3d,
+        'contour':pl_contour,
+        'box_times':box_times,
+        'box_costs':box_costs,
+        'scatter':scatter
     }
 
 def execute_ga(params, hybrid_individual = None):
