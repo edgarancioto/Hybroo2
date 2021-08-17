@@ -5,6 +5,9 @@ import os
 import json
 import asyncio
 import websockets
+import smtplib
+import email.message
+
 
 class Main():
 
@@ -98,6 +101,7 @@ class Main():
         j = {}
         j['data'] = await cls.loop.run_in_executor(None, EXECUTION_CONTROL.simule_functions, params['collectionData'], simulation)
         j['task'] = 'simule_functions_results'
+        print(j)
         await conn.send(json.dumps(j))
         return {'data':'Finishing the execution', 'task':'simule_functions'}
 
@@ -124,6 +128,24 @@ class Main():
         j['data'] = await cls.loop.run_in_executor(None, EXECUTION_CONTROL.solve_instances, params['collectionData'])
         await conn.send(json.dumps(j))
         return {'data':'Finishing the execution', 'task':'instances_solver'}
+    
+    @classmethod
+    async def send_email(cls, conn, params):
+        corpo_email = "<p>Parágrafo1</p><p>Parágrafo2</p>"
+        msg = email.message.Message()
+        msg['Subject'] = 'Assunto'
+        msg['From'] = 'remetente'
+        msg['To'] = 'destinatario'
+        password = 'senha'
+        msg.add_header('Content-Type', 'text/html')
+        msg.set_payload(corpo_email )
+
+        s = smtplib.SMTP('smtp.gmail.com: 587')
+        s.starttls()
+        # Login Credentials for sending the mail
+        s.login(msg['From'], password)
+        s.sendmail(msg['From'], [msg['To']], msg.as_string().encode('utf-8'))
+        print('Email enviado')
 
 
 if __name__ == "__main__":
