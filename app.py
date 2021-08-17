@@ -85,7 +85,7 @@ class Main():
 
     @classmethod
     async def functions_solver(cls, conn, params):
-        simulation = params['collectionData']['simulation']
+        simulation = int(params['collectionData']['simulation'])
         if simulation == 0:
             await conn.send(json.dumps({'data':'Starts a single execution', 'task':'functions_solver'}))
             j = {}
