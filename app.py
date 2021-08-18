@@ -5,11 +5,15 @@ import os
 import json
 import asyncio
 import websockets
-import smtplib
-import email.message
 
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 
 class Main():
+
+    sender_address = 'hybrooh@gmail.com'
+    sender_pass = 'hybroo@01'
 
     @classmethod    
     def run(cls):
@@ -140,25 +144,25 @@ class Main():
     
     @classmethod
     async def send_email(cls, conn, params):
-        corpo_email = "<p>Parágrafo1</p><p>Parágrafo2</p>"
-        msg = email.message.Message()
-        msg['Subject'] = 'Assunto'
-        msg['From'] = 'remetente'
-        msg['To'] = 'destinatario'
-        password = 'senha'
-        msg.add_header('Content-Type', 'text/html')
-        msg.set_payload(corpo_email )
-
-        s = smtplib.SMTP('smtp.gmail.com: 587')
-        s.starttls()
-        # Login Credentials for sending the mail
-        s.login(msg['From'], password)
-        s.sendmail(msg['From'], [msg['To']], msg.as_string().encode('utf-8'))
-        print('Email enviado')
+        mail_content = """Hello"""
+        receiver_address = 'junior.ancioto@gmail.com'
+        message = MIMEMultipart()
+        message['From'] = cls.sender_address
+        message['To'] = receiver_address
+        message['Subject'] = 'A test mail sent by Python. It has an attachment.'
+        message.attach(MIMEText(mail_content, 'plain'))
+        session = smtplib.SMTP('smtp.gmail.com', 587)
+        session.starttls()
+        session.login(cls.sender_address, cls.sender_pass)
+        text = message.as_string()
+        session.sendmail(cls.sender_address, receiver_address, text)
+        session.quit()
+        print('Mail Sent')
 
 
 if __name__ == "__main__":
     Main().run()
+    
     """data = {'collectionData': {
         "problem":"2", "dimension":"2",
         "isHybrid":False,
