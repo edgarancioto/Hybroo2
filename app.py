@@ -10,6 +10,7 @@ import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
+
 class Main():
 
     sender_address = 'hybrooh@gmail.com'
@@ -32,18 +33,19 @@ class Main():
                 message = json.loads(message)
                 for conn in cls.connected:
                     if conn == websocket:
-                        await conn.send(await cls.call_tasks(conn, message))
+                        await cls.call_tasks(conn, message)
         finally:
             cls.connected.remove(websocket)
     
     @classmethod
     async def call_tasks(cls, conn, string):
-        print('Test on call_tasks')
-        print(string)
+        print('\nTest on call_tasks', string)
+        
         task = getattr(cls, string['task'])
         if string['params'] == 'None':
-            return json.dumps(await task(conn))
-        return json.dumps(await task(conn, string['params']))
+            await task(conn)
+        else:
+            await task(conn, string['params'])
 
     @classmethod
     def find_function_by_id(cls, id):
@@ -59,70 +61,64 @@ class Main():
     async def home_info(cls, conn):
         j = json.loads(open("./CODE/JSON/home-page.json", 'r', encoding='utf-8').read())
         j['task'] = 'home_info'
-        return j
+        await conn.send(json.dumps(j))
 
     @classmethod
     async def functions_names(cls, conn):
         j = json.loads(open("./CODE/JSON/functions-names.json", 'r').read())
         j['task'] = 'functions_names'
-        return j
+        await conn.send(json.dumps(j))
 
     @classmethod
     async def functions_details(cls, conn, params):
         try:
-            i, _ = Main.find_function_by_id(int(params['function_id']))
-            i['task'] = 'functions_details'
-            return i
+            j, _ = Main.find_function_by_id(int(params['function_id']))
+            j['task'] = 'functions_details'
         except:
-            return "<h1>NOT FOUND</h1>"
+            j = "<h1>NOT FOUND</h1>"
+        await conn.send(json.dumps(j))
 
     @classmethod
     async def functions_details_img(cls, conn, params):
         try:
             i, obj = Main.find_function_by_id(int(params['function_id']))
-            return { 'id': i['id'],'task': 'functions_details_img', 'img': ('http://latex.codecogs.com/svg.latex?'+obj.get_format_expression()).replace(' ','')}    
+            j = { 'id': i['id'],'task': 'functions_details_img', 'img': ('http://latex.codecogs.com/svg.latex?'+obj.get_format_expression()).replace(' ','')}    
         except:
-            return "<h1>NOT FOUND</h1>"
+            j =  "<h1>NOT FOUND</h1>"
+        await conn.send(json.dumps(j))
 
     @classmethod
     async def functions_methods(cls, conn):
         j = json.loads(open(os.path.dirname(__file__) + "./CODE/JSON/functions-methods.json", 'r').read())
         j['task'] = 'functions_methods'
-        return j
+        await conn.send(json.dumps(j))
 
     @classmethod
     async def functions_solver(cls, conn, params):
         j = {}
-
         simulation = int(params['collectionData']['simulation'])
         
         if simulation == 0:
-            await conn.send(json.dumps({'data':'Starts a single execution', 'task':'functions_solver'}))
             j['data'] = await cls.loop.run_in_executor(None, EXECUTION_CONTROL.solve_functions, params['collectionData'])
-            j['task'] = 'functions_solver_results'
-            await conn.send(json.dumps(j))
-            return {'data':'Finishing the execution', 'task':'functions_solver'}
-        
-        await conn.send(json.dumps({'data':'Starts a new Simulation', 'task':'simule_functions'}))
-        j['data'] = await cls.loop.run_in_executor(None, EXECUTION_CONTROL.simule_functions, params['collectionData'], simulation)
-        j['task'] = 'simule_functions_results'
+            j['task'] = 'functions_solver'
+        else:
+            j['data'] = await cls.loop.run_in_executor(None, EXECUTION_CONTROL.simule_functions, params['collectionData'], simulation)
+            j['task'] = 'simulation'
         await conn.send(json.dumps(j))
-        return {'data':'Finishing the simulation', 'task':'simule_functions'}
-
 
     @classmethod
     async def instances_names(cls, conn):
-        data = {}
-        data['task'] = 'instances_names'
+        j = {}
+        j['task'] = 'instances_names'
         for folder in os.listdir('./CODE/INSTANCES/'):
-            data[folder] = os.listdir('./CODE/INSTANCES/'+folder)
-        return json.loads(json.dumps(data))
+            j[folder] = os.listdir('./CODE/INSTANCES/'+folder)
+        await conn.send(json.dumps(j))
 
     @classmethod
     async def instances_methods(cls, conn):
         j = json.loads(open(os.path.dirname(__file__) + "./CODE/JSON/instances-methods.json", 'r').read())
         j['task'] = 'instances_methods'
-        return j
+        await conn.send(json.dumps(j))
 
     @classmethod
     async def instances_solver(cls, conn, params):
@@ -130,17 +126,12 @@ class Main():
 
         simulation = int(params['collectionData']['simulation'])
         if simulation == 0:
-            await conn.send(json.dumps({'data':'Starts a new execution', 'task':'instances_solver'}))
-            j['task'] = 'instances_solver_results'
+            j['task'] = 'instances_solver'
             j['data'] = await cls.loop.run_in_executor(None, EXECUTION_CONTROL.solve_instances, params['collectionData'])
-            await conn.send(json.dumps(j))
-            return {'data':'Finishing the execution', 'task':'instances_solver'}
-        
-        await conn.send(json.dumps({'data':'Starts a new simulation', 'task':'simule_instances'}))
-        j['task'] = 'simule_instances_results'
-        j['data'] = await cls.loop.run_in_executor(None, EXECUTION_CONTROL.simule_instances, params['collectionData'], simulation)
+        else:
+            j['task'] = 'simulation'
+            j['data'] = await cls.loop.run_in_executor(None, EXECUTION_CONTROL.simule_instances, params['collectionData'], simulation)
         await conn.send(json.dumps(j))
-        return {'data':'Finishing the simulation', 'task':'simule_instances'}
     
     @classmethod
     async def send_email(cls, conn, params):
