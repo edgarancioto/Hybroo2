@@ -84,42 +84,25 @@ def simule_instances(dp, repetitions):
         initial_time = time.time()
         result_first = globals()[callable_method_1](data_instance['firstMethod'], None)
         if isHybrid:
-            result_second = globals()[callable_method_2](data_function['secondMethod'], result_first[0])
-            vec_costs.append(result_second[3])
+            result_second = globals()[callable_method_2](data_instance['secondMethod'], result_first[0])
+            vec_costs.append(result_second[1])
         else:
-            vec_costs.append(result_first[3])
+            vec_costs.append(result_first[1])
         
         vec_times.append(time.time() - initial_time)
     
     PLOTS = PLots()
-    route_plot = PLOTS.plot_route(type_problem, instance_object.node_coord, result_first)
-
-    if not isHybrid:
-        err1 = PLOTS.plot_err(result_first[2])
-        
-        return {
-            'problem':instance_object.name,
-            'problem-description':str(instance_object),
-            'isHybrid':isHybrid,
-            'result-first':result_first_done,
-            'images':[err1, route_plot, err1, route_plot]
-        }
-
-    initial_time = time.time()
-    result_second = globals()[callable_method](data_instance['firstMethod'], result_first[0])
-    result_second_done = {'value-best': str(result_first[1]), 'time': str(time.time() - initial_time)}
-        
-    err1, err2, err3 = PLOTS.plot_err(result_first[2], result_second[2])
-    route_plot_2 = PLOTS.plot_route(type_problem, instance_object.node_coord, result_second)
+    #box_times, box_costs, scatter = PLOTS.plot_simulation(vec_times, vec_costs)
 
     return {
         'problem':instance_object.name,
         'problem-description':str(instance_object),
         'isHybrid':isHybrid,
-        'result-first':result_first_done,
-        'result-second':result_second_done,
-        'images':[err1, err2, err3, route_plot, route_plot_2, err1, route_plot],
-        'hibridization-analysis':str('The FIRST hit the value SOMEVALUE in TIME seconds.\nStarting on the best found value, the SECOND *CONDITION got a improve DIFFERENCE in the solution, in TIME seconds. Hybridization reached a value of FINAL-VALUE in a total of FINAL-TIME seconds, considered a effective result, because one method support the other.')
+        'costs':vec_costs,
+        'times':vec_times,
+        #'box_times':box_times,
+        #'box_costs':box_costs,
+        #'scatter':scatter
     }
 
 def execute_cvrp_aco(params, hybrid_individual = None):
@@ -261,7 +244,7 @@ def simule_functions(dp, repetitions):
         initial_time = time.time()
         result_first = globals()[callable_method](data_function['firstMethod'], None)
         if isHybrid:
-            result_second = globals()[callable_method](data_function['firstMethod'], result_first[0])
+            result_second = globals()[callable_method](data_function['secondMethod'], result_first[0])
             vec_costs.append(result_second[3])
         else:
             vec_costs.append(result_first[3])
