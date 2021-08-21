@@ -5,11 +5,12 @@ import os
 import json
 import asyncio
 import websockets
-
+import io
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-
+from email.mime.base import MIMEBase
+from email import encoders
 
 class Main():
 
@@ -99,12 +100,13 @@ class Main():
         simulation = int(params['collectionData']['simulation'])
         
         if simulation == 0:
-            j['data'] = await cls.loop.run_in_executor(None, EXECUTION_CONTROL.solve_functions, params['collectionData'])
             j['task'] = 'functions_solver'
+            j['data'] = await cls.loop.run_in_executor(None, EXECUTION_CONTROL.solve_functions, params['collectionData'])
+            await conn.send(json.dumps(j))
         else:
             j['data'] = await cls.loop.run_in_executor(None, EXECUTION_CONTROL.simule_functions, params['collectionData'], simulation)
-            j['task'] = 'simulation'
-        await conn.send(json.dumps(j))
+            await cls.send_simulation(conn, params, j)
+        
 
     @classmethod
     async def instances_names(cls, conn):
@@ -123,95 +125,42 @@ class Main():
     @classmethod
     async def instances_solver(cls, conn, params):
         j = {}
-
         simulation = int(params['collectionData']['simulation'])
+
         if simulation == 0:
             j['task'] = 'instances_solver'
             j['data'] = await cls.loop.run_in_executor(None, EXECUTION_CONTROL.solve_instances, params['collectionData'])
         else:
-            j['task'] = 'simulation'
             j['data'] = await cls.loop.run_in_executor(None, EXECUTION_CONTROL.simule_instances, params['collectionData'], simulation)
-        await conn.send(json.dumps(j))
+            await cls.send_simulation(conn, params, j)
     
     @classmethod
-    async def send_email(cls, conn, params):
-        mail_content = """Hello"""
-        receiver_address = 'junior.ancioto@gmail.com'
+    async def send_simulation(cls, conn, params, results):
+        params['results'] = results
+
+        json_file = io.StringIO(json.dumps(params['collectionData']))
+
+        mail_content = 'Some description text about Hybroo'
+        receiver_address = params['collectionData']['userMail']
         message = MIMEMultipart()
         message['From'] = cls.sender_address
         message['To'] = receiver_address
-        message['Subject'] = 'A test mail sent by Python. It has an attachment.'
+        message['Subject'] = 'A first version of mail with simulation results.'
+        
         message.attach(MIMEText(mail_content, 'plain'))
+        payload = MIMEBase('application', 'octate-stream')
+        payload.set_payload(json_file.read())
+        encoders.encode_base64(payload)
+        payload.add_header('Content-Disposition', 'attachment', filename='simulation.json')
+        message.attach(payload)
         session = smtplib.SMTP('smtp.gmail.com', 587)
         session.starttls()
         session.login(cls.sender_address, cls.sender_pass)
         text = message.as_string()
         session.sendmail(cls.sender_address, receiver_address, text)
         session.quit()
-        print('Mail Sent')
 
 
 if __name__ == "__main__":
     Main().run()
-    
-    """data = {'collectionData': {
-        "problem":"2", "dimension":"2",
-        "isHybrid":False,
-        "firstMethod":{
-        "name-method":"ga",
-        "Population":"50",
-        "Generation":"3",
-        "Crossover":"0.8",
-        "Mutation":"0.05",
-        "Elitism":"0.15"},
-        "secondMethod":{
-        "name-method":"0"}}}
-
-    j = {}
-    j['data'] = EXECUTION_CONTROL.simule_functions(data['collectionData'], 10)
-    print(j)
-    """
-    """
-    data = {'collectionData': {
-        "problem":"A-n32-k5.vrp",
-        "isHybrid":True,
-        "firstMethod":{
-            "name-method":"vrp-ga",
-            "Population":"50",
-            "Generation":"3",
-            #"Crossover":"0.8",
-            #"Simple":"0.04",
-            "Inverse":"0.08",
-            "Elitism":"0.15",
-            "Special":"checked"
-        },
-        "secondMethod":{
-            "name-method":"vrp-ga",
-            "Population":"50",
-            "Generation":"50",
-            #"Crossover":"0.8",
-            #"Simple":"0.04",
-            "Inverse":"0.08",
-            "Elitism":"0.15",
-            "Special":"checked"
-        }}}
-    """
-    """
-    data = {'collectionData': {
-        "problem":"A-n32-k5.vrp",
-        "isHybrid":False,
-        "firstMethod":{
-            "name-method":"vrp-ga",
-            "Population":"50",
-            "Generation":"1000",
-            "Inverse":"1",
-            "Elitism":"0.2",
-            "Special":"checked"
-        },"secondMethod":{0}}}
-    '''784'''
-    j = {}
-    j['data'] = EXECUTION_CONTROL.simule_instances(data['collectionData'],3)
-    print(j['data']['costs'])
-    print(j['data']['times'])
-    """
     
